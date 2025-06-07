@@ -4,33 +4,97 @@
  */
 package proyecto;
 
-import java.util.List;
-import javax.swing.JButton;
-import java.util.ArrayList;
 
-import javax.swing.ImageIcon;
+import java.util.Random;
+import javax.swing.JButton;
+
+
+ import javax.swing.ImageIcon;
 
 
 public class Swingpractica1 extends javax.swing.JFrame {
-
-  
+private ImageIcon iconoEscalado;
    JButton tableroBotones[][]=new JButton[10][10];
    Ficha fichas[][]=new Ficha[10][10]; 
-   List<Ficha> heroes=new ArrayList<>();
-   List<Ficha> villanos=new ArrayList<>();
- 
+   int pruebaNum=0;
+    int columnasTot=10,filasTot=10;
+   Random rand = new Random();
+   
+
+
  
  public Swingpractica1() {
         
         initComponents();
-        villanos.add(new Ficha("ABOMINATION", new ImageIcon(getClass().getResource("/fichasPNG/Fichas/ABOMINATION.png")), "villano", 4));
-        villanos.add(new Ficha("APOCALYPSE", new ImageIcon(getClass().getResource("/fichasPNG/Fichas/APOCALYPSE.png")), "villano", 7));
-        villanos.add(new Ficha("BLACKCAT", new ImageIcon(getClass().getResource("/fichasPNG/Fichas/BLACKCAT.png")), "villano", 4));
-        villanos.add(new Ficha("BULLSEYE", new ImageIcon(getClass().getResource("/fichasPNG/Fichas/BULLSEYE.png")), "villano", 6));
-        villanos.add(new Ficha("DEADPOOL", new ImageIcon(getClass().getResource("/fichasPNG/Fichas/DEADPOOL.png")), "villano", 5));
-        villanos.add(new Ficha("DR DOOM", new ImageIcon(getClass().getResource("/fichasPNG/Fichas/DR DOOM.png")), "villano", 10));
-        villanos.add(new Ficha("DR OCTOPUS", new ImageIcon(getClass().getResource("/fichasPNG/Fichas/DR.OCTOPUS.png")), "villano", 4));
-        villanos.add(new Ficha("GALACTUS", new ImageIcon(getClass().getResource("/fichasPNG/Fichas/GALACTUS.png")), "villano", 4));
+      int contador=0;
+       Ficha[] heroes = new Ficha[40];
+
+// Dentro de tu clase Swingpractica1, tras initComponents():
+ImageIcon[] heroIcons = new ImageIcon[] {
+    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/Beast.png")),
+    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/black widow.png")),
+    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/Blade.png")),
+    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/Captain America.png")),
+    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/Colossus.png")),
+    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/Cyclops.png")),
+    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/Daredevil.png")),
+    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/Dr Strange.png")),
+    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/elektra.png")),
+    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/Emma Frost.png")),
+    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/gambit.png")),
+    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/Ghost rider.png")),
+    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/Giant Man.png")),
+    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/Hulk.png")),
+    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/Human torch.png")),
+    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/Ice Man.png")),
+    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/Invisible woman.png")),
+    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/Iron Man.png")),
+    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/Mr.Fantastic.png")),
+    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/Namor.png")),
+    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/Nick Fury.png")),
+    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/nightcrawler.png")),
+    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/nova blast.png")),
+    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/nova blast.png")),
+    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/nova blast.png")),
+    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/nova blast.png")),
+    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/nova blast.png")),
+    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/nova blast.png")),
+    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/Phoenix.png")),
+    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/planeta tierra.png")),
+    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/Proffesor x.png")),
+    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/Punisher.png")),
+    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/She-Hulk.png")),
+    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/Silver Surfer.png")),
+    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/Spider Girl.png")),
+    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/Spider Man.png")),
+    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/Storm.png")),
+    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/Thing.png")),
+    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/Thor.png")),
+    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/Wolverine.png"))
+};
+
+
+if (heroIcons[0] != null) {
+    b1.setIcon(heroIcons[0]);
+} else {
+    System.err.println("No se encontró Beast.png en el classpath");
+}
+        
+        for (int fila = 0; fila < 10; fila++) {
+            for (int col = 0; col < 10; col++) {
+                int numeroRand = rand.nextInt(40);
+         if(numeroRand!=pruebaNum){
+         
+           tableroBotones[fila][col].setIcon(heroes[numeroRand].getIcono());
+             pruebaNum = numeroRand;
+         }else{
+         contador--;
+         }
+                
+            }
+     }
+    
+        
         
         
         tableroBotones[0][0]=b1;
@@ -135,9 +199,15 @@ public class Swingpractica1 extends javax.swing.JFrame {
          tableroBotones[9][9]=b100;
          
          
- }
+         
+         b1.setIcon(new ImageIcon(getClass().getResource("/fichasPNG/Fichas/ABOMINATION.png")));
+         
+        
+       
+ }       
 
-          private void posicion(JButton objetivo){
+          
+ private void posicion(JButton objetivo){
             for (int i = 0; i < tableroBotones.length; i++) {
             for (int j = 0; j < tableroBotones.length; j++) {
                 if(tableroBotones[i][j]==objetivo){
@@ -409,14 +479,13 @@ public class Swingpractica1 extends javax.swing.JFrame {
         });
         getContentPane().add(b2, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 460, 42, 38));
 
-        b1.setText("jButton101");
         b1.setPreferredSize(new java.awt.Dimension(50, 23));
         b1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 b1ActionPerformed(evt);
             }
         });
-        getContentPane().add(b1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 460, 42, 38));
+        getContentPane().add(b1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 460, 40, 40));
 
         b20.setText("jButton101");
         b20.setPreferredSize(new java.awt.Dimension(50, 23));
@@ -1162,8 +1231,8 @@ public class Swingpractica1 extends javax.swing.JFrame {
         });
         getContentPane().add(b90, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 120, 42, 38));
 
-        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Tablero2.1.png"))); // NOI18N
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -50, 550, 680));
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/proyecto/Tablero2.1.png"))); // NOI18N
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -50, 610, 680));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -1718,4 +1787,11 @@ public class Swingpractica1 extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
+
+    private static class heroes {
+
+        
+    }
+
+    
 }
