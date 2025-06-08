@@ -1,9 +1,10 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt 
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java 
  */
 package proyecto;
 
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 /**
@@ -18,6 +19,8 @@ public class Ficha {
  private int Rango;
  private boolean movio;
  
+ 
+ 
  public Ficha(String Nombre, ImageIcon Icono, String Tipo, int Rango){
 this.Nombre=Nombre;
 this.Icono=Icono;
@@ -26,7 +29,10 @@ this.Rango=Rango;
 this.movio=false;
 
  }
-   public ImageIcon getIcono() {
+   public String getNombre() {
+   return Nombre;
+   }     
+ public ImageIcon getIcono() {
    return Icono;
    }     
    public String getTipo() {
@@ -41,4 +47,6 @@ this.movio=false;
 public void mover() {
    movio=true;
    }     
+
+   
 }

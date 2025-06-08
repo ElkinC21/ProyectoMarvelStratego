@@ -5,217 +5,332 @@
 package proyecto;
 
 
-import java.util.Random;
 import javax.swing.JButton;
 
-
- import javax.swing.ImageIcon;
-
+import java.util.Random;
+import javax.swing.ImageIcon;
 
 public class Swingpractica1 extends javax.swing.JFrame {
-private ImageIcon iconoEscalado;
-   JButton tableroBotones[][]=new JButton[10][10];
-   Ficha fichas[][]=new Ficha[10][10]; 
-   int pruebaNum=0;
-    int columnasTot=10,filasTot=10;
-   Random rand = new Random();
+
+    JButton tableroBotones[][] = new JButton[10][10];
+    Ficha fichas[][] = new Ficha[10][10];
+    Random random = new Random();
+    private Ficha heroes[] = new Ficha[40];
+    private Ficha villanos[] = new Ficha[40];
    
+    
+String beast             = "BEAST.png";
+String blackWidow        = "BLACKWIDOW.png";
+String blade             = "BLADE.png";
+String captainAmerica    = "CAPTAINAMERICA.png";
+String punisher          = "PUNISHER.png";
+String colossus          = "COLOSSUS.png";
+String cyclops           = "CYCLOPS.png";
+String daredevil         = "DAREDEVIL.png";
+String drStrange         = "DRSTRANGE.png";
+String thing             = "THING.png";
+String emmaFrost         = "EMMAFROST.png";
+String ghostRider        = "GHOSTRIDER.png";
+String giantMan          = "GIANTMAN.png";
+String hulk              = "HULK.png";
+String humanTorch        = "HUMANTORCH.png";
+String iceMan            = "ICEMAN.png";
+String invisibleWoman    = "INVISIBLEWOMAN.png";
+String ironMan           = "IRONMAN.png";
+String nightcrawler      = "NIGHTCRAWLER.png";
+String mrFantastic       = "MRFANTASTIC.png";
+String namor             = "NAMOR.png";
+String nickFury          = "NICKFURY.png";
+String phoenix           = "PHOENIX.png";
+String proffesorX        = "PROFFESORX.png";
+String sheHulk           = "SHEHULK.png";
+String silverSurfer      = "SILVERSURFER.png";
+String spiderGirl        = "SPIDERGIRL.png";
+String spiderMan         = "SPIDERMAN.png";
+String storm             = "STORM.png";
+String thor              = "THOR.png";
+String wolverine         = "WOLVERINE.png";
+String elektra           = "ELEKTRA.png";
+String gambit            = "GAMBIT.png";
+String novaBlast         = "NOVABLAST.png";
+String planetaTierra     = "PLANETATIERRA.png";
+String drDoom            = "DRDOOM.png";
+String galactus          = "GALACTUS.png";
+String kingpin           = "KINGPIN.png";
+String magneto           = "MAGNETO.png";
+String apocalypse        = "APOCALYPSE.png";
+String greenGoblin       = "GREENGOBLIN.png";
+String venom             = "VENOM.png";
+String bullseye          = "BULLSEYE.png";
+String omegaRed          = "OMEGARED.png";
+String onslaught         = "ONSLAUGHT.png";
+String redSkull          = "REDSKULL.png";
+String mystyque          = "MYSTYQUE.png";
+String mysterio          = "MYSTERIO.png";
+String drOctopus         = "DR.OCTOPUS.png";
+String deadpool          = "DEADPOOL.png";
+String abomination       = "ABOMINATION2.png";
+String thanos            = "THANOS.png";
+String blackcat          = "BLACKCAT.png";
+String sabretooth        = "SABRETOOTH.png";
+String juggernaut        = "JUGGERNAUT.png";
+String rhino             = "RHINO.png";
+String carnage           = "CARNAGE.png";
+String moleMan           = "MOLEMAN.png";
+String lizard            = "LIZARD.png";
+String mrSinister        = "MRSINISTER.png";
+String sentinel1         = "SENTINEL1.png";
+String ultron            = "ULTRON.png";
+String sandman           = "SANDMAN.png";
+String leader            = "LEADER.png";
+String viper             = "VIPER.png";
+String sentinel2         = "SENTINEL2.png";
+String electro           = "ELECTRO.png";
+String blackWidowVillana = "BlackWidowvillana.png";
+String pumpkinBomb1      = "PUMPKINBOMB.png";
+String tierraVillanos    = "TIERRAVILLANOS.png";
 
+    
+            
+    public Swingpractica1() {
 
- 
- public Swingpractica1() {
-        
         initComponents();
-      int contador=0;
-       Ficha[] heroes = new Ficha[40];
 
-// Dentro de tu clase Swingpractica1, tras initComponents():
-ImageIcon[] heroIcons = new ImageIcon[] {
-    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/Beast.png")),
-    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/black widow.png")),
-    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/Blade.png")),
-    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/Captain America.png")),
-    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/Colossus.png")),
-    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/Cyclops.png")),
-    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/Daredevil.png")),
-    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/Dr Strange.png")),
-    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/elektra.png")),
-    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/Emma Frost.png")),
-    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/gambit.png")),
-    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/Ghost rider.png")),
-    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/Giant Man.png")),
-    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/Hulk.png")),
-    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/Human torch.png")),
-    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/Ice Man.png")),
-    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/Invisible woman.png")),
-    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/Iron Man.png")),
-    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/Mr.Fantastic.png")),
-    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/Namor.png")),
-    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/Nick Fury.png")),
-    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/nightcrawler.png")),
-    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/nova blast.png")),
-    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/nova blast.png")),
-    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/nova blast.png")),
-    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/nova blast.png")),
-    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/nova blast.png")),
-    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/nova blast.png")),
-    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/Phoenix.png")),
-    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/planeta tierra.png")),
-    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/Proffesor x.png")),
-    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/Punisher.png")),
-    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/She-Hulk.png")),
-    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/Silver Surfer.png")),
-    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/Spider Girl.png")),
-    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/Spider Man.png")),
-    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/Storm.png")),
-    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/Thing.png")),
-    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/Thor.png")),
-    new ImageIcon(getClass().getResource("/fichasPNG/Fichas/Wolverine.png"))
-};
+        tableroBotones[0][0] = b1;
+        tableroBotones[0][1] = b2;
+        tableroBotones[0][2] = b3;
+        tableroBotones[0][3] = b4;
+        tableroBotones[0][4] = b5;
+        tableroBotones[0][5] = b6;
+        tableroBotones[0][6] = b7;
+        tableroBotones[0][7] = b8;
+        tableroBotones[0][8] = b9;
+        tableroBotones[0][9] = b10;
+        tableroBotones[1][0] = b11;
+        tableroBotones[1][1] = b12;
+        tableroBotones[1][2] = b13;
+        tableroBotones[1][3] = b14;
+        tableroBotones[1][4] = b15;
+        tableroBotones[1][5] = b16;
+        tableroBotones[1][6] = b17;
+        tableroBotones[1][7] = b18;
+        tableroBotones[1][8] = b19;
+        tableroBotones[1][9] = b20;
+        tableroBotones[2][0] = b21;
+        tableroBotones[2][1] = b22;
+        tableroBotones[2][2] = b23;
+        tableroBotones[2][3] = b24;
+        tableroBotones[2][4] = b25;
+        tableroBotones[2][5] = b26;
+        tableroBotones[2][6] = b27;
+        tableroBotones[2][7] = b28;
+        tableroBotones[2][8] = b29;
+        tableroBotones[2][9] = b30;
+        tableroBotones[3][0] = b31;
+        tableroBotones[3][1] = b32;
+        tableroBotones[3][2] = b33;
+        tableroBotones[3][3] = b34;
+        tableroBotones[3][4] = b35;
+        tableroBotones[3][5] = b36;
+        tableroBotones[3][6] = b37;
+        tableroBotones[3][7] = b38;
+        tableroBotones[3][8] = b39;
+        tableroBotones[3][9] = b40;
+        tableroBotones[4][0] = b41;
+        tableroBotones[4][1] = b42;
+        tableroBotones[4][2] = b43;
+        tableroBotones[4][3] = b44;
+        tableroBotones[4][4] = b45;
+        tableroBotones[4][5] = b46;
+        tableroBotones[4][6] = b47;
+        tableroBotones[4][7] = b48;
+        tableroBotones[4][8] = b49;
+        tableroBotones[4][9] = b50;
+        tableroBotones[5][0] = b51;
+        tableroBotones[5][1] = b52;
+        tableroBotones[5][2] = b53;
+        tableroBotones[5][3] = b54;
+        tableroBotones[5][4] = b55;
+        tableroBotones[5][5] = b56;
+        tableroBotones[5][6] = b57;
+        tableroBotones[5][7] = b58;
+        tableroBotones[5][8] = b59;
+        tableroBotones[5][9] = b60;
+        tableroBotones[6][0] = b61;
+        tableroBotones[6][1] = b62;
+        tableroBotones[6][2] = b63;
+        tableroBotones[6][3] = b64;
+        tableroBotones[6][4] = b65;
+        tableroBotones[6][5] = b66;
+        tableroBotones[6][6] = b67;
+        tableroBotones[6][7] = b68;
+        tableroBotones[6][8] = b69;
+        tableroBotones[6][9] = b70;
+        tableroBotones[7][0] = b71;
+        tableroBotones[7][1] = b72;
+        tableroBotones[7][2] = b73;
+        tableroBotones[7][3] = b74;
+        tableroBotones[7][4] = b75;
+        tableroBotones[7][5] = b76;
+        tableroBotones[7][6] = b77;
+        tableroBotones[7][7] = b78;
+        tableroBotones[7][8] = b79;
+        tableroBotones[7][9] = b80;
+        tableroBotones[8][0] = b81;
+        tableroBotones[8][1] = b82;
+        tableroBotones[8][2] = b83;
+        tableroBotones[8][3] = b84;
+        tableroBotones[8][4] = b85;
+        tableroBotones[8][5] = b86;
+        tableroBotones[8][6] = b87;
+        tableroBotones[8][7] = b88;
+        tableroBotones[8][8] = b89;
+        tableroBotones[8][9] = b90;
+        tableroBotones[9][0] = b91;
+        tableroBotones[9][1] = b92;
+        tableroBotones[9][2] = b93;
+        tableroBotones[9][3] = b94;
+        tableroBotones[9][4] = b95;
+        tableroBotones[9][5] = b96;
+        tableroBotones[9][6] = b97;
+        tableroBotones[9][7] = b98;
+        tableroBotones[9][8] = b99;
+        tableroBotones[9][9] = b100;
 
+        ValorFichas();
+        PosicionesRandom(heroes, 0);
+        PosicionesRandom(villanos, 6);
 
-if (heroIcons[0] != null) {
-    b1.setIcon(heroIcons[0]);
-} else {
-    System.err.println("No se encontró Beast.png en el classpath");
-}
-        
-        for (int fila = 0; fila < 10; fila++) {
-            for (int col = 0; col < 10; col++) {
-                int numeroRand = rand.nextInt(40);
-         if(numeroRand!=pruebaNum){
-         
-           tableroBotones[fila][col].setIcon(heroes[numeroRand].getIcono());
-             pruebaNum = numeroRand;
-         }else{
-         contador--;
-         }
-                
-            }
-     }
+    }
+
     
         
-        
-        
-        tableroBotones[0][0]=b1;
-         tableroBotones[0][1]=b2;
-         tableroBotones[0][2]=b3;
-         tableroBotones[0][3]=b4;
-         tableroBotones[0][4]=b5;
-         tableroBotones[0][5]=b6;
-         tableroBotones[0][6]=b7;
-         tableroBotones[0][7]=b8;
-         tableroBotones[0][8]=b9;
-         tableroBotones[0][9]=b10;
-         tableroBotones[1][0]=b11;
-         tableroBotones[1][1]=b12;
-         tableroBotones[1][2]=b13;
-         tableroBotones[1][3]=b14;
-         tableroBotones[1][4]=b15;
-         tableroBotones[1][5]=b16;
-         tableroBotones[1][6]=b17;
-         tableroBotones[1][7]=b18;
-         tableroBotones[1][8]=b19;
-         tableroBotones[1][9]=b20;
-         tableroBotones[2][0]=b21;
-         tableroBotones[2][1]=b22;
-         tableroBotones[2][2]=b23;
-         tableroBotones[2][3]=b24;
-         tableroBotones[2][4]=b25;
-         tableroBotones[2][5]=b26;
-         tableroBotones[2][6]=b27;
-         tableroBotones[2][7]=b28;
-         tableroBotones[2][8]=b29;
-         tableroBotones[2][9]=b30;
-         tableroBotones[3][0]=b31;
-         tableroBotones[3][1]=b32;
-         tableroBotones[3][2]=b33;
-         tableroBotones[3][3]=b34;
-         tableroBotones[3][4]=b35;
-         tableroBotones[3][5]=b36;
-         tableroBotones[3][6]=b37;
-         tableroBotones[3][7]=b38;
-         tableroBotones[3][8]=b39;
-         tableroBotones[3][9]=b40;
-         tableroBotones[4][0]=b41;
-         tableroBotones[4][1]=b42;
-         tableroBotones[4][2]=b43;
-         tableroBotones[4][3]=b44;
-         tableroBotones[4][4]=b45;
-         tableroBotones[4][5]=b46;
-         tableroBotones[4][6]=b47;
-         tableroBotones[4][7]=b48;
-         tableroBotones[4][8]=b49;
-         tableroBotones[4][9]=b50;
-         tableroBotones[5][0]=b51;
-         tableroBotones[5][1]=b52;
-         tableroBotones[5][2]=b53;
-         tableroBotones[5][3]=b54;
-         tableroBotones[5][4]=b55;
-         tableroBotones[5][5]=b56;
-         tableroBotones[5][6]=b57;
-         tableroBotones[5][7]=b58;
-         tableroBotones[5][8]=b59;
-         tableroBotones[5][9]=b60;
-         tableroBotones[6][0]=b61;
-         tableroBotones[6][1]=b62;
-         tableroBotones[6][2]=b63;
-         tableroBotones[6][3]=b64;
-         tableroBotones[6][4]=b65;
-         tableroBotones[6][5]=b66;
-         tableroBotones[6][6]=b67;
-         tableroBotones[6][7]=b68;
-         tableroBotones[6][8]=b69;
-         tableroBotones[6][9]=b70;
-         tableroBotones[7][0]=b71;
-         tableroBotones[7][1]=b72;
-         tableroBotones[7][2]=b73;
-         tableroBotones[7][3]=b74;
-         tableroBotones[7][4]=b75;
-         tableroBotones[7][5]=b76;
-         tableroBotones[7][6]=b77;
-         tableroBotones[7][7]=b78;
-         tableroBotones[7][8]=b79;
-         tableroBotones[7][9]=b80;
-         tableroBotones[8][0]=b81;
-         tableroBotones[8][1]=b82;
-         tableroBotones[8][2]=b83;
-         tableroBotones[8][3]=b84;
-         tableroBotones[8][4]=b85;
-         tableroBotones[8][5]=b86;
-         tableroBotones[8][6]=b87;
-         tableroBotones[8][7]=b88;
-         tableroBotones[8][8]=b89;
-         tableroBotones[8][9]=b90;
-         tableroBotones[9][0]=b91;
-         tableroBotones[9][1]=b92;
-         tableroBotones[9][2]=b93;
-         tableroBotones[9][3]=b94;
-         tableroBotones[9][4]=b95;
-         tableroBotones[9][5]=b96;
-         tableroBotones[9][6]=b97;
-         tableroBotones[9][7]=b98;
-         tableroBotones[9][8]=b99;
-         tableroBotones[9][9]=b100;
-         
-         
-         
-         b1.setIcon(new ImageIcon(getClass().getResource("/fichasPNG/Fichas/ABOMINATION.png")));
-         
-        
-       
- }       
+private void ValorFichas() {
+   
 
-          
- private void posicion(JButton objetivo){
-            for (int i = 0; i < tableroBotones.length; i++) {
+    heroes[0]  = new Ficha("Beast",            new ImageIcon(getClass().getResource(beast)),           "heroe", 3);
+    heroes[1]  = new Ficha("Black Widow",      new ImageIcon(getClass().getResource(blackWidow)),      "heroe", 3);
+    heroes[2]  = new Ficha("Blade",            new ImageIcon(getClass().getResource(blade)),           "heroe", 3);
+    heroes[3]  = new Ficha("Captain America",  new ImageIcon(getClass().getResource(captainAmerica)),  "heroe", 3);
+    heroes[4]  = new Ficha("Punisher",         new ImageIcon(getClass().getResource(punisher)),         "heroe", 3);
+    heroes[5]  = new Ficha("Colossus",         new ImageIcon(getClass().getResource(colossus)),         "heroe", 3);
+    heroes[6]  = new Ficha("Cyclops",          new ImageIcon(getClass().getResource(cyclops)),          "heroe", 3);
+    heroes[7]  = new Ficha("Daredevil",        new ImageIcon(getClass().getResource(daredevil)),        "heroe", 3);
+    heroes[8]  = new Ficha("Dr Strange",       new ImageIcon(getClass().getResource(drStrange)),        "heroe", 3);
+    heroes[9]  = new Ficha("Thing",            new ImageIcon(getClass().getResource(thing)),            "heroe", 3);
+    heroes[10] = new Ficha("Emma Frost",       new ImageIcon(getClass().getResource(emmaFrost)),        "heroe", 3);
+    heroes[11] = new Ficha("Ghost Rider",      new ImageIcon(getClass().getResource(ghostRider)),       "heroe", 3);
+    heroes[12] = new Ficha("Giant Man",        new ImageIcon(getClass().getResource(giantMan)),         "heroe", 3);
+    heroes[13] = new Ficha("Hulk",             new ImageIcon(getClass().getResource(hulk)),             "heroe", 3);
+    heroes[14] = new Ficha("Human Torch",      new ImageIcon(getClass().getResource(humanTorch)),       "heroe", 3);
+    heroes[15] = new Ficha("Ice Man",          new ImageIcon(getClass().getResource(iceMan)),           "heroe", 3);
+    heroes[16] = new Ficha("Invisible Woman",  new ImageIcon(getClass().getResource(invisibleWoman)),   "heroe", 3);
+    heroes[17] = new Ficha("Iron Man",         new ImageIcon(getClass().getResource(ironMan)),          "heroe", 3);
+    heroes[18] = new Ficha("Nightcrawler",     new ImageIcon(getClass().getResource(nightcrawler)),     "heroe", 3);
+    heroes[19] = new Ficha("Mr Fantastic",     new ImageIcon(getClass().getResource(mrFantastic)),      "heroe", 3);
+    heroes[20] = new Ficha("Namor",            new ImageIcon(getClass().getResource(namor)),            "heroe", 3);
+    heroes[21] = new Ficha("Nick Fury",        new ImageIcon(getClass().getResource(nickFury)),         "heroe", 3);
+    heroes[22] = new Ficha("Phoenix",          new ImageIcon(getClass().getResource(phoenix)),          "heroe", 3);
+    heroes[23] = new Ficha("Proffesor X",      new ImageIcon(getClass().getResource(proffesorX)),       "heroe", 3);
+    heroes[24] = new Ficha("She-Hulk",         new ImageIcon(getClass().getResource(sheHulk)),          "heroe", 3);
+    heroes[25] = new Ficha("Silver Surfer",    new ImageIcon(getClass().getResource(silverSurfer)),     "heroe", 3);
+    heroes[26] = new Ficha("Spider Girl",      new ImageIcon(getClass().getResource(spiderGirl)),       "heroe", 3);
+    heroes[27] = new Ficha("Spider Man",       new ImageIcon(getClass().getResource(spiderMan)),        "heroe", 3);
+    heroes[28] = new Ficha("Storm",            new ImageIcon(getClass().getResource(storm)),            "heroe", 3);
+    heroes[29] = new Ficha("Thor",             new ImageIcon(getClass().getResource(thor)),             "heroe", 3);
+    heroes[30] = new Ficha("Wolverine",        new ImageIcon(getClass().getResource(wolverine)),        "heroe", 3);
+    heroes[31] = new Ficha("Elektra",          new ImageIcon(getClass().getResource(elektra)),          "heroe", 3);
+    heroes[32] = new Ficha("Gambit",           new ImageIcon(getClass().getResource(gambit)),           "heroe", 3);
+    heroes[33] = new Ficha("Nova Blast",       new ImageIcon(getClass().getResource(novaBlast)),        "heroe", 3);
+    heroes[34] = new Ficha("Nova Blast",       new ImageIcon(getClass().getResource(novaBlast)),        "heroe", 3);
+    heroes[35] = new Ficha("Nova Blast",       new ImageIcon(getClass().getResource(novaBlast)),        "heroe", 3);
+    heroes[36] = new Ficha("Nova Blast",       new ImageIcon(getClass().getResource(novaBlast)),        "heroe", 3);
+    heroes[37] = new Ficha("Nova Blast",       new ImageIcon(getClass().getResource(novaBlast)),        "heroe", 3);
+    heroes[38] = new Ficha("Nova Blast",       new ImageIcon(getClass().getResource(novaBlast)),        "heroe", 3);
+    heroes[39] = new Ficha("Planeta Tierra",   new ImageIcon(getClass().getResource(planetaTierra)),    "heroe", 3);
+
+    // Villanos
+    villanos[0]  = new Ficha("Dr Doom",         new ImageIcon(getClass().getResource(drDoom)),           "Villano", 3);
+    villanos[1]  = new Ficha("Galactus",        new ImageIcon(getClass().getResource(galactus)),         "Villano", 3);
+    villanos[2]  = new Ficha("Kingpin",         new ImageIcon(getClass().getResource(kingpin)),          "Villano", 3);
+    villanos[3]  = new Ficha("Magneto",         new ImageIcon(getClass().getResource(magneto)),          "Villano", 3);
+    villanos[4]  = new Ficha("Apocalypse",      new ImageIcon(getClass().getResource(apocalypse)),       "Villano", 3);
+    villanos[5]  = new Ficha("Green Goblin",    new ImageIcon(getClass().getResource(greenGoblin)),      "Villano", 3);
+    villanos[6]  = new Ficha("Venom",           new ImageIcon(getClass().getResource(venom)),            "Villano", 3);
+    villanos[7]  = new Ficha("Bullseye",        new ImageIcon(getClass().getResource(bullseye)),         "Villano", 3);
+    villanos[8]  = new Ficha("Omega Red",       new ImageIcon(getClass().getResource(omegaRed)),         "Villano", 3);
+    villanos[9]  = new Ficha("Onslaught",       new ImageIcon(getClass().getResource(onslaught)),        "Villano", 3);
+    villanos[10] = new Ficha("Red Skull",       new ImageIcon(getClass().getResource(redSkull)),         "Villano", 3);
+    villanos[11] = new Ficha("Mystique",        new ImageIcon(getClass().getResource(mystyque)),         "Villano", 3);
+    villanos[12] = new Ficha("Mysterio",        new ImageIcon(getClass().getResource(mysterio)),         "Villano", 3);
+    villanos[13] = new Ficha("Dr Octopus",      new ImageIcon(getClass().getResource(drOctopus)),        "Villano", 3);
+    villanos[14] = new Ficha("Deadpool",        new ImageIcon(getClass().getResource(deadpool)),         "Villano", 3);
+    villanos[15] = new Ficha("Abomination",     new ImageIcon(getClass().getResource(abomination)),      "Villano", 3);
+    villanos[16] = new Ficha("Thanos",          new ImageIcon(getClass().getResource(thanos)),           "Villano", 3);
+    villanos[17] = new Ficha("Black Cat",       new ImageIcon(getClass().getResource(blackcat)),         "Villano", 3);
+    villanos[18] = new Ficha("Sabretooth",      new ImageIcon(getClass().getResource(sabretooth)),       "Villano", 3);
+    villanos[19] = new Ficha("Juggernaut",      new ImageIcon(getClass().getResource(juggernaut)),       "Villano", 3);
+    villanos[20] = new Ficha("Rhino",           new ImageIcon(getClass().getResource(rhino)),            "Villano", 3);
+    villanos[21] = new Ficha("Carnage",         new ImageIcon(getClass().getResource(carnage)),          "Villano", 3);
+    villanos[22] = new Ficha("Mole Man",        new ImageIcon(getClass().getResource(moleMan)),          "Villano", 3);
+    villanos[23] = new Ficha("Lizard",          new ImageIcon(getClass().getResource(lizard)),           "Villano", 3);
+    villanos[24] = new Ficha("Mr.Sinister",     new ImageIcon(getClass().getResource(mrSinister)),       "Villano", 3);
+    villanos[25] = new Ficha("Sentinel 1",      new ImageIcon(getClass().getResource(sentinel1)),        "Villano", 3);
+    villanos[26] = new Ficha("Ultron",          new ImageIcon(getClass().getResource(ultron)),           "Villano", 3);
+    villanos[27] = new Ficha("Sandman",         new ImageIcon(getClass().getResource(sandman)),          "Villano", 3);
+    villanos[28] = new Ficha("Leader",          new ImageIcon(getClass().getResource(leader)),           "Villano", 3);
+    villanos[29] = new Ficha("Viper",           new ImageIcon(getClass().getResource(viper)),            "Villano", 3);
+    villanos[30] = new Ficha("Sentinel 2",      new ImageIcon(getClass().getResource(sentinel2)),        "Villano", 3);
+    villanos[31] = new Ficha("Electro",         new ImageIcon(getClass().getResource(electro)),          "Villano", 3);
+    villanos[32] = new Ficha("Black Widow",     new ImageIcon(getClass().getResource(blackWidowVillana)),"Villano", 3);
+    villanos[33] = new Ficha("Pumpkin Bomb",    new ImageIcon(getClass().getResource(pumpkinBomb1)),     "Villano", 3);
+    villanos[34] = new Ficha("Pumpkin Bomb",    new ImageIcon(getClass().getResource(pumpkinBomb1)),     "Villano", 3);
+    villanos[35] = new Ficha("Pumpkin Bomb",    new ImageIcon(getClass().getResource(pumpkinBomb1)),     "Villano", 3);
+    villanos[36] = new Ficha("Pumpkin Bomb",    new ImageIcon(getClass().getResource(pumpkinBomb1)),     "Villano", 3);
+    villanos[37] = new Ficha("Pumpkin Bomb",    new ImageIcon(getClass().getResource(pumpkinBomb1)),     "Villano", 3);
+    villanos[38] = new Ficha("Pumpkin Bomb",    new ImageIcon(getClass().getResource(pumpkinBomb1)),     "Villano", 3);
+    villanos[39] = new Ficha("Tierra Villanos", new ImageIcon(getClass().getResource(tierraVillanos)),   "Villano", 3);
+}
+
+
+    
+
+    private void PosicionesRandom(Ficha[] grupo, int primerafila) {
+
+        int[] posiciones = new int[40];
+        for (int i = 0; i < posiciones.length; i++) {
+            posiciones[i] = i;
+        }
+
+        for (int i = posiciones.length - 1; i > 0; i--) {
+            int j = random.nextInt(i + 1);
+
+            int guardar = posiciones[i];
+            posiciones[i] = posiciones[j];
+            posiciones[j] = guardar;
+        }
+
+        for (int i = 0; i < grupo.length; i++) {
+            int p = posiciones[i];
+            int fila = primerafila + (p / 10);
+            int col = p % 10;
+            
+                   
+            tableroBotones[fila][col].setIcon(grupo[i].getIcono());
+            fichas[fila][col] = grupo[i];
+        }
+    }
+
+    private void posicion(JButton objetivo) {
+        for (int i = 0; i < tableroBotones.length; i++) {
             for (int j = 0; j < tableroBotones.length; j++) {
-                if(tableroBotones[i][j]==objetivo){
-                    System.out.println("boton esta en fila: "+i+" Columna "+j);
+                if (tableroBotones[i][j] == objetivo) {
+                    System.out.println("boton esta en fila: " + i + " Columna " + j);
+                }
             }
-            }
-            }
-        } 
+        }
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -1101,7 +1216,7 @@ if (heroIcons[0] != null) {
                 b79ActionPerformed(evt);
             }
         });
-        getContentPane().add(b79, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 160, 42, 38));
+        getContentPane().add(b79, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 160, 42, 38));
 
         b80.setPreferredSize(new java.awt.Dimension(50, 23));
         b80.addActionListener(new java.awt.event.ActionListener() {
@@ -1109,7 +1224,7 @@ if (heroIcons[0] != null) {
                 b80ActionPerformed(evt);
             }
         });
-        getContentPane().add(b80, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 160, 42, 38));
+        getContentPane().add(b80, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 160, 42, 38));
 
         b97.setPreferredSize(new java.awt.Dimension(50, 23));
         b97.addActionListener(new java.awt.event.ActionListener() {
@@ -1238,23 +1353,23 @@ if (heroIcons[0] != null) {
     }// </editor-fold>//GEN-END:initComponents
 
     private void b93ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b93ActionPerformed
-        posicion(b93); 
+        posicion(b93);
     }//GEN-LAST:event_b93ActionPerformed
 
     private void b94ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b94ActionPerformed
-      posicion(b94);
+        posicion(b94);
     }//GEN-LAST:event_b94ActionPerformed
 
     private void b95ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b95ActionPerformed
-     posicion(b95);
+        posicion(b95);
     }//GEN-LAST:event_b95ActionPerformed
 
     private void b96ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b96ActionPerformed
-       posicion(b96);
+        posicion(b96);
     }//GEN-LAST:event_b96ActionPerformed
 
     private void b91ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b91ActionPerformed
-         posicion(b91);
+        posicion(b91);
     }//GEN-LAST:event_b91ActionPerformed
 
     private void b10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b10ActionPerformed
@@ -1262,11 +1377,11 @@ if (heroIcons[0] != null) {
     }//GEN-LAST:event_b10ActionPerformed
 
     private void b9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b9ActionPerformed
-         posicion(b9);
+        posicion(b9);
     }//GEN-LAST:event_b9ActionPerformed
 
     private void b8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b8ActionPerformed
-         posicion(b8);
+        posicion(b8);
     }//GEN-LAST:event_b8ActionPerformed
 
     private void b7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b7ActionPerformed
@@ -1286,20 +1401,20 @@ if (heroIcons[0] != null) {
     }//GEN-LAST:event_b4ActionPerformed
 
     private void b3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b3ActionPerformed
-       posicion(b3);
+        posicion(b3);
     }//GEN-LAST:event_b3ActionPerformed
 
     private void b2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b2ActionPerformed
-         posicion(b2);
+        posicion(b2);
     }//GEN-LAST:event_b2ActionPerformed
 
     private void b1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b1ActionPerformed
         posicion(b1);
-    
+
     }//GEN-LAST:event_b1ActionPerformed
 
     private void b20ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b20ActionPerformed
-         posicion(b20);
+        posicion(b20);
     }//GEN-LAST:event_b20ActionPerformed
 
     private void b19ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b19ActionPerformed
@@ -1315,11 +1430,11 @@ if (heroIcons[0] != null) {
     }//GEN-LAST:event_b17ActionPerformed
 
     private void b16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b16ActionPerformed
-       posicion(b16);
+        posicion(b16);
     }//GEN-LAST:event_b16ActionPerformed
 
     private void b15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b15ActionPerformed
-         posicion(b15);
+        posicion(b15);
     }//GEN-LAST:event_b15ActionPerformed
 
     private void b14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b14ActionPerformed
@@ -1327,7 +1442,7 @@ if (heroIcons[0] != null) {
     }//GEN-LAST:event_b14ActionPerformed
 
     private void b13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b13ActionPerformed
-         posicion(b13);
+        posicion(b13);
     }//GEN-LAST:event_b13ActionPerformed
 
     private void b12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b12ActionPerformed
@@ -1335,16 +1450,16 @@ if (heroIcons[0] != null) {
     }//GEN-LAST:event_b12ActionPerformed
 
     private void b11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b11ActionPerformed
-         posicion(b11);
+        posicion(b11);
     }//GEN-LAST:event_b11ActionPerformed
 
     private void b30ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b30ActionPerformed
-         posicion(b30);
+        posicion(b30);
     }//GEN-LAST:event_b30ActionPerformed
 
     private void b29ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b29ActionPerformed
-         posicion(b29);
-                 
+        posicion(b29);
+
     }//GEN-LAST:event_b29ActionPerformed
 
     private void b28ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b28ActionPerformed
@@ -1360,11 +1475,11 @@ if (heroIcons[0] != null) {
     }//GEN-LAST:event_b26ActionPerformed
 
     private void b25ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b25ActionPerformed
-         posicion(b25);
+        posicion(b25);
     }//GEN-LAST:event_b25ActionPerformed
 
     private void b24ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b24ActionPerformed
-         posicion(b24);
+        posicion(b24);
     }//GEN-LAST:event_b24ActionPerformed
 
     private void b23ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b23ActionPerformed
@@ -1372,11 +1487,11 @@ if (heroIcons[0] != null) {
     }//GEN-LAST:event_b23ActionPerformed
 
     private void b22ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b22ActionPerformed
-       posicion(b22);
+        posicion(b22);
     }//GEN-LAST:event_b22ActionPerformed
 
     private void b21ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b21ActionPerformed
-         posicion(b21);
+        posicion(b21);
     }//GEN-LAST:event_b21ActionPerformed
 
     private void b40ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b40ActionPerformed
@@ -1384,11 +1499,11 @@ if (heroIcons[0] != null) {
     }//GEN-LAST:event_b40ActionPerformed
 
     private void b39ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b39ActionPerformed
-         posicion(b39);
+        posicion(b39);
     }//GEN-LAST:event_b39ActionPerformed
 
     private void b38ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b38ActionPerformed
-         posicion(b38);
+        posicion(b38);
     }//GEN-LAST:event_b38ActionPerformed
 
     private void b37ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b37ActionPerformed
@@ -1396,7 +1511,7 @@ if (heroIcons[0] != null) {
     }//GEN-LAST:event_b37ActionPerformed
 
     private void b36ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b36ActionPerformed
-         posicion(b36);
+        posicion(b36);
     }//GEN-LAST:event_b36ActionPerformed
 
     private void b35ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b35ActionPerformed
@@ -1404,19 +1519,19 @@ if (heroIcons[0] != null) {
     }//GEN-LAST:event_b35ActionPerformed
 
     private void b34ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b34ActionPerformed
-         posicion(b34);
+        posicion(b34);
     }//GEN-LAST:event_b34ActionPerformed
 
     private void b33ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b33ActionPerformed
-         posicion(b33);
+        posicion(b33);
     }//GEN-LAST:event_b33ActionPerformed
 
     private void b32ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b32ActionPerformed
-         posicion(b32);
+        posicion(b32);
     }//GEN-LAST:event_b32ActionPerformed
 
     private void b31ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b31ActionPerformed
-         posicion(b31);
+        posicion(b31);
     }//GEN-LAST:event_b31ActionPerformed
 
     private void b50ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b50ActionPerformed
@@ -1424,7 +1539,7 @@ if (heroIcons[0] != null) {
     }//GEN-LAST:event_b50ActionPerformed
 
     private void b49ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b49ActionPerformed
-         posicion(b49);
+        posicion(b49);
     }//GEN-LAST:event_b49ActionPerformed
 
     private void b48ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b48ActionPerformed
@@ -1432,11 +1547,11 @@ if (heroIcons[0] != null) {
     }//GEN-LAST:event_b48ActionPerformed
 
     private void b47ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b47ActionPerformed
-         posicion(b47);
+        posicion(b47);
     }//GEN-LAST:event_b47ActionPerformed
 
     private void b46ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b46ActionPerformed
-         posicion(b46);
+        posicion(b46);
     }//GEN-LAST:event_b46ActionPerformed
 
     private void b45ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b45ActionPerformed
@@ -1444,11 +1559,11 @@ if (heroIcons[0] != null) {
     }//GEN-LAST:event_b45ActionPerformed
 
     private void b44ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b44ActionPerformed
-         posicion(b44);
+        posicion(b44);
     }//GEN-LAST:event_b44ActionPerformed
 
     private void b43ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b43ActionPerformed
-         posicion(b43);
+        posicion(b43);
     }//GEN-LAST:event_b43ActionPerformed
 
     private void b42ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b42ActionPerformed
@@ -1456,11 +1571,11 @@ if (heroIcons[0] != null) {
     }//GEN-LAST:event_b42ActionPerformed
 
     private void b41ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b41ActionPerformed
-         posicion(b41);
+        posicion(b41);
     }//GEN-LAST:event_b41ActionPerformed
 
     private void b51ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b51ActionPerformed
-         posicion(b51);
+        posicion(b51);
     }//GEN-LAST:event_b51ActionPerformed
 
     private void b52ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b52ActionPerformed
@@ -1472,23 +1587,23 @@ if (heroIcons[0] != null) {
     }//GEN-LAST:event_b53ActionPerformed
 
     private void b54ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b54ActionPerformed
-         posicion(b54);
+        posicion(b54);
     }//GEN-LAST:event_b54ActionPerformed
 
     private void b55ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b55ActionPerformed
-         posicion(b55);
+        posicion(b55);
     }//GEN-LAST:event_b55ActionPerformed
 
     private void b56ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b56ActionPerformed
-         posicion(b56);
+        posicion(b56);
     }//GEN-LAST:event_b56ActionPerformed
 
     private void b57ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b57ActionPerformed
-         posicion(b57);
+        posicion(b57);
     }//GEN-LAST:event_b57ActionPerformed
 
     private void b58ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b58ActionPerformed
-         posicion(b58);
+        posicion(b58);
     }//GEN-LAST:event_b58ActionPerformed
 
     private void b59ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b59ActionPerformed
@@ -1496,7 +1611,7 @@ if (heroIcons[0] != null) {
     }//GEN-LAST:event_b59ActionPerformed
 
     private void b60ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b60ActionPerformed
-         posicion(b60);
+        posicion(b60);
     }//GEN-LAST:event_b60ActionPerformed
 
     private void b61ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b61ActionPerformed
@@ -1504,11 +1619,11 @@ if (heroIcons[0] != null) {
     }//GEN-LAST:event_b61ActionPerformed
 
     private void b62ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b62ActionPerformed
-         posicion(b62);
+        posicion(b62);
     }//GEN-LAST:event_b62ActionPerformed
 
     private void b63ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b63ActionPerformed
-         posicion(b63);
+        posicion(b63);
     }//GEN-LAST:event_b63ActionPerformed
 
     private void b64ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b64ActionPerformed
@@ -1516,7 +1631,7 @@ if (heroIcons[0] != null) {
     }//GEN-LAST:event_b64ActionPerformed
 
     private void b65ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b65ActionPerformed
-         posicion(b65);
+        posicion(b65);
     }//GEN-LAST:event_b65ActionPerformed
 
     private void b66ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b66ActionPerformed
@@ -1532,15 +1647,15 @@ if (heroIcons[0] != null) {
     }//GEN-LAST:event_b68ActionPerformed
 
     private void b69ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b69ActionPerformed
-         posicion(b69);
+        posicion(b69);
     }//GEN-LAST:event_b69ActionPerformed
 
     private void b70ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b70ActionPerformed
-         posicion(b70);
+        posicion(b70);
     }//GEN-LAST:event_b70ActionPerformed
 
     private void b71ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b71ActionPerformed
-         posicion(b71);
+        posicion(b71);
     }//GEN-LAST:event_b71ActionPerformed
 
     private void b72ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b72ActionPerformed
@@ -1556,19 +1671,19 @@ if (heroIcons[0] != null) {
     }//GEN-LAST:event_b74ActionPerformed
 
     private void b75ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b75ActionPerformed
-         posicion(b75);
+        posicion(b75);
     }//GEN-LAST:event_b75ActionPerformed
 
     private void b76ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b76ActionPerformed
-         posicion(b76);
+        posicion(b76);
     }//GEN-LAST:event_b76ActionPerformed
 
     private void b77ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b77ActionPerformed
-         posicion(b77);
+        posicion(b77);
     }//GEN-LAST:event_b77ActionPerformed
 
     private void b78ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b78ActionPerformed
-         posicion(b78);
+        posicion(b78);
     }//GEN-LAST:event_b78ActionPerformed
 
     private void b79ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b79ActionPerformed
@@ -1576,23 +1691,23 @@ if (heroIcons[0] != null) {
     }//GEN-LAST:event_b79ActionPerformed
 
     private void b80ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b80ActionPerformed
-         posicion(b80);
+        posicion(b80);
     }//GEN-LAST:event_b80ActionPerformed
 
     private void b97ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b97ActionPerformed
-         posicion(b97);
+        posicion(b97);
     }//GEN-LAST:event_b97ActionPerformed
 
     private void b98ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b98ActionPerformed
-         posicion(b98);
+        posicion(b98);
     }//GEN-LAST:event_b98ActionPerformed
 
     private void b99ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b99ActionPerformed
-         posicion(b99);
+        posicion(b99);
     }//GEN-LAST:event_b99ActionPerformed
 
     private void b100ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b100ActionPerformed
-         posicion(b100);
+        posicion(b100);
     }//GEN-LAST:event_b100ActionPerformed
 
     private void b81ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b81ActionPerformed
@@ -1604,15 +1719,15 @@ if (heroIcons[0] != null) {
     }//GEN-LAST:event_b82ActionPerformed
 
     private void b83ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b83ActionPerformed
-         posicion(b83);
+        posicion(b83);
     }//GEN-LAST:event_b83ActionPerformed
 
     private void b84ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b84ActionPerformed
-       posicion(b84);
+        posicion(b84);
     }//GEN-LAST:event_b84ActionPerformed
 
     private void b85ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b85ActionPerformed
-         posicion(b85);
+        posicion(b85);
     }//GEN-LAST:event_b85ActionPerformed
 
     private void b86ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b86ActionPerformed
@@ -1620,7 +1735,7 @@ if (heroIcons[0] != null) {
     }//GEN-LAST:event_b86ActionPerformed
 
     private void b87ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b87ActionPerformed
-         posicion(b87);
+        posicion(b87);
     }//GEN-LAST:event_b87ActionPerformed
 
     private void b88ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b88ActionPerformed
@@ -1628,11 +1743,11 @@ if (heroIcons[0] != null) {
     }//GEN-LAST:event_b88ActionPerformed
 
     private void b89ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b89ActionPerformed
-       posicion(b89);
+        posicion(b89);
     }//GEN-LAST:event_b89ActionPerformed
 
     private void b92ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b92ActionPerformed
-         posicion(b92);
+        posicion(b92);
     }//GEN-LAST:event_b92ActionPerformed
 
     private void b90ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b90ActionPerformed
@@ -1640,7 +1755,7 @@ if (heroIcons[0] != null) {
     }//GEN-LAST:event_b90ActionPerformed
 
     private void b94ComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_b94ComponentAdded
-        
+
     }//GEN-LAST:event_b94ComponentAdded
 
     private void b94ComponentRemoved(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_b94ComponentRemoved
@@ -1788,10 +1903,4 @@ if (heroIcons[0] != null) {
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 
-    private static class heroes {
-
-        
-    }
-
-    
 }
