@@ -4,8 +4,8 @@
  */
 package proyecto;
 
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
+
 
 /**
  *
@@ -44,9 +44,7 @@ this.movio=false;
    public boolean getmovio() {
    return movio;
    }     
-public void mover() {
-   movio=true;
-   }     
+  
 
    
 }
