@@ -8,6 +8,7 @@ import java.awt.Image;
 import javax.swing.JButton;
 
 import java.util.Random;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
@@ -15,13 +16,14 @@ public class ProyectoStratego extends javax.swing.JFrame {
 
     private Ficha fichaseleccionada = null;
     private int filasalida, colsalida;
-    private String turno="Turno : Heroes";
+    private String turno="Heroes";
     JButton tableroBotones[][] = new JButton[10][10];
     Ficha fichas[][] = new Ficha[10][10];
     Random random = new Random();
     private Ficha heroes[] = new Ficha[40];
     private Ficha villanos[] = new Ficha[40];
-    
+    private ImageIcon[][] icVillanos;   
+    private ImageIcon[][] icHeroes= new ImageIcon[10][10];
 
     String beast = "BEAST.png";
     String blackWidow = "BLACKWIDOW.png";
@@ -204,8 +206,67 @@ this.setLocationRelativeTo(null);
         PosicionesRandom(villanos, 6);
 
     }
+    
+private void guardarIconos() {
+    for (int fila = 0; fila < fichas.length; fila++) {
+        for (int col = 0; col < fichas[fila].length; col++) {
+            Ficha ficha = fichas[fila][col];
+            if (ficha != null) {
+                Icon raw = tableroBotones[fila][col].getIcon();
+                if (raw instanceof ImageIcon) {
+                    ImageIcon icono = (ImageIcon) raw;
+                    if ("Heroes".equals(ficha.getTipo())) {
+                        icHeroes[fila][col] = icono;
+                    } else if ("Villanos".equals(ficha.getTipo())) {
+                        icVillanos[fila][col] = icono;
+                    }
+                }
+            }
+        }
+    }
+}
 
-  private boolean movvalido(int filasalida, int colsalida, int filadestino, int coldestino) {
+private void esconder() {
+        boolean turnoHeroes = "Heroes".equals(turno);
+        String ocultarTipo = turnoHeroes ? "Villanos" : "Heroes";
+
+        for (int fila = 0; fila < fichas.length; fila++) {
+            for (int col = 0; col < fichas[fila].length; col++) {
+                Ficha ficha = fichas[fila][col];
+                if (ficha != null && ocultarTipo.equals(ficha.getTipo())) {
+                    JButton btn = tableroBotones[fila][col];
+                    btn.setIcon(null);
+                    btn.revalidate();
+                    btn.repaint();
+                }
+            }
+        }
+    }
+
+private void revelar() {
+        boolean turnoHeroes = "Heroes".equals(turno);
+        String mostrarTipo = turnoHeroes ? "Villanos" : "Heroes";
+        ImageIcon[][] icArray = turnoHeroes ? icVillanos : icHeroes;
+
+        for (int fila = 0; fila < fichas.length; fila++) {
+            for (int col = 0; col < fichas[fila].length; col++) {
+                Ficha ficha = fichas[fila][col];
+                if (ficha != null && mostrarTipo.equals(ficha.getTipo())) {
+                    ImageIcon iconoGuardado = icArray[fila][col];
+                    if (iconoGuardado != null) {
+                        JButton btn = tableroBotones[fila][col];
+                        btn.setIcon(iconoGuardado);
+                        btn.revalidate();
+                        btn.repaint();
+                    }
+                }
+            }
+        }
+    }
+
+  
+    
+    private boolean movvalido(int filasalida, int colsalida, int filadestino, int coldestino) {
     Ficha ficha = fichas[filasalida][colsalida];
     int rango = ficha.getRango();
 
@@ -273,7 +334,16 @@ private void Click(int fila, int columna) {
         colsalida= columna;
         return;
     }
-
+      
+    if(!fichaseleccionada.getTipo().equals(turno)){
+    JOptionPane.showMessageDialog(this,
+                "TURNO DEL RIVAL!!!!!",
+                "ERROR",
+                JOptionPane.PLAIN_MESSAGE);
+           
+            fichaseleccionada = null;
+            return;
+    }
     
     if (fichaseleccionada != null) {
         
@@ -308,11 +378,19 @@ private void Click(int fila, int columna) {
            
             tableroBotones[fila][columna].setIcon(fichaseleccionada.getIcono());
             fichas[fila][columna] = fichaseleccionada;
-            turno="Turno : Villanos";
-            jLabel1.setText(turno);
+            if(turno.equals("Heroes")){
+            turno="Villanos";
+            jLabel1.setText("Turno: "+turno);
+            }else if(turno.equals("Villanos")){
+            turno="Heroes";
+            jLabel1.setText("Turno: "+turno);
+            }
             
             tableroBotones[filasalida][colsalida].setIcon(null);
             fichas[filasalida][colsalida] = null; 
+           guardarIconos();
+           esconder();
+           revelar();
             
         }else{
         JOptionPane.showMessageDialog(this,
@@ -343,87 +421,87 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
 
   private void ValorFichas() {
 
-        heroes[0] = new Ficha("Beast", new ImageIcon(new ImageIcon(getClass().getResource(beast)).getImage().getScaledInstance(45, 50, Image.SCALE_SMOOTH)), "heroe", 3);
-        heroes[1] = new Ficha("Black Widow", new ImageIcon(getClass().getResource(blackWidow)), "heroe", 1);
-        heroes[2] = new Ficha("Blade", new ImageIcon(getClass().getResource(blade)), "heroe", 4);
-        heroes[3] = new Ficha("Captain America", new ImageIcon(getClass().getResource(captainAmerica)), "heroe", 9);
-        heroes[4] = new Ficha("Punisher", new ImageIcon(getClass().getResource(punisher)), "heroe", 4);
-        heroes[5] = new Ficha("Colossus", new ImageIcon(getClass().getResource(colossus)), "heroe", 3);
-        heroes[6] = new Ficha("Cyclops", new ImageIcon(getClass().getResource(cyclops)), "heroe", 5);
-        heroes[7] = new Ficha("Daredevil", new ImageIcon(getClass().getResource(daredevil)), "heroe", 6);
-        heroes[8] = new Ficha("Dr Strange", new ImageIcon(getClass().getResource(drStrange)), "heroe", 2);
-        heroes[9] = new Ficha("Thing", new ImageIcon(getClass().getResource(thing)), "heroe", 4);
-        heroes[10] = new Ficha("Emma Frost", new ImageIcon(getClass().getResource(emmaFrost)), "heroe", 3);
-        heroes[11] = new Ficha("Ghost Rider", new ImageIcon(getClass().getResource(ghostRider)), "heroe", 4);
-        heroes[12] = new Ficha("Giant Man", new ImageIcon(getClass().getResource(giantMan)), "heroe", 3);
-        heroes[13] = new Ficha("Hulk", new ImageIcon(getClass().getResource(hulk)), "heroe", 6);
-        heroes[14] = new Ficha("Human Torch", new ImageIcon(getClass().getResource(humanTorch)), "heroe", 5);
-        heroes[15] = new Ficha("Ice Man", new ImageIcon(getClass().getResource(iceMan)), "heroe", 2);
-        heroes[16] = new Ficha("Invisible Woman", new ImageIcon(getClass().getResource(invisibleWoman)), "heroe", 5);
-        heroes[17] = new Ficha("Iron Man", new ImageIcon(getClass().getResource(ironMan)), "heroe", 6);
-        heroes[18] = new Ficha("Nightcrawler", new ImageIcon(getClass().getResource(nightcrawler)), "heroe", 2);
-        heroes[19] = new Ficha("Mr Fantastic", new ImageIcon(getClass().getResource(mrFantastic)), "heroe", 10);
-        heroes[20] = new Ficha("Namor", new ImageIcon(getClass().getResource(namor)), "heroe", 7);
-        heroes[21] = new Ficha("Nick Fury", new ImageIcon(getClass().getResource(nickFury)), "heroe", 8);
-        heroes[22] = new Ficha("Phoenix", new ImageIcon(getClass().getResource(phoenix)), "heroe", 2);
-        heroes[23] = new Ficha("Proffesor X", new ImageIcon(getClass().getResource(proffesorX)), "heroe", 8);
-        heroes[24] = new Ficha("She-Hulk", new ImageIcon(getClass().getResource(sheHulk)), "heroe", 3);
-        heroes[25] = new Ficha("Silver Surfer", new ImageIcon(getClass().getResource(silverSurfer)), "heroe", 6);
-        heroes[26] = new Ficha("Spider Girl", new ImageIcon(getClass().getResource(spiderGirl)), "heroe", 2);
-        heroes[27] = new Ficha("Spider Man", new ImageIcon(getClass().getResource(spiderMan)), "heroe", 7);
-        heroes[28] = new Ficha("Storm", new ImageIcon(getClass().getResource(storm)), "heroe", 2);
-        heroes[29] = new Ficha("Thor", new ImageIcon(getClass().getResource(thor)), "heroe", 5);
-        heroes[30] = new Ficha("Wolverine", new ImageIcon(getClass().getResource(wolverine)), "heroe", 7);
-        heroes[31] = new Ficha("Elektra", new ImageIcon(getClass().getResource(elektra)), "heroe", 2);
-        heroes[32] = new Ficha("Gambit", new ImageIcon(getClass().getResource(gambit)), "heroe", 2);
-        heroes[33] = new Ficha("Nova Blast", new ImageIcon(getClass().getResource(novaBlast)), "heroe", 15);
-        heroes[34] = new Ficha("Nova Blast", new ImageIcon(getClass().getResource(novaBlast)), "heroe", 15);
-        heroes[35] = new Ficha("Nova Blast", new ImageIcon(getClass().getResource(novaBlast)), "heroe", 15);
-        heroes[36] = new Ficha("Nova Blast", new ImageIcon(getClass().getResource(novaBlast)), "heroe", 15);
-        heroes[37] = new Ficha("Nova Blast", new ImageIcon(getClass().getResource(novaBlast)), "heroe", 15);
-        heroes[38] = new Ficha("Nova Blast", new ImageIcon(getClass().getResource(novaBlast)), "heroe", 15);
-        heroes[39] = new Ficha("Planeta Tierra", new ImageIcon(getClass().getResource(planetaTierra)), "heroe", 20);
+        heroes[0] = new Ficha("Beast", new ImageIcon(new ImageIcon(getClass().getResource(beast)).getImage().getScaledInstance(50,60, Image.SCALE_SMOOTH)), "Heroes", 3);
+        heroes[1] = new Ficha("Black Widow", new ImageIcon(getClass().getResource(blackWidow)), "Heroes", 1);
+        heroes[2] = new Ficha("Blade", new ImageIcon(getClass().getResource(blade)), "Heroes", 4);
+        heroes[3] = new Ficha("Captain America", new ImageIcon(getClass().getResource(captainAmerica)), "Heroes", 9);
+        heroes[4] = new Ficha("Punisher", new ImageIcon(getClass().getResource(punisher)), "Heroes", 4);
+        heroes[5] = new Ficha("Colossus", new ImageIcon(getClass().getResource(colossus)), "Heroes", 3);
+        heroes[6] = new Ficha("Cyclops", new ImageIcon(getClass().getResource(cyclops)), "Heroes", 5);
+        heroes[7] = new Ficha("Daredevil", new ImageIcon(getClass().getResource(daredevil)), "Heroes", 6);
+        heroes[8] = new Ficha("Dr Strange", new ImageIcon(getClass().getResource(drStrange)), "Heroes", 2);
+        heroes[9] = new Ficha("Thing", new ImageIcon(getClass().getResource(thing)), "Heroes", 4);
+        heroes[10] = new Ficha("Emma Frost", new ImageIcon(getClass().getResource(emmaFrost)), "Heroes", 3);
+        heroes[11] = new Ficha("Ghost Rider", new ImageIcon(getClass().getResource(ghostRider)), "Heroes", 4);
+        heroes[12] = new Ficha("Giant Man", new ImageIcon(getClass().getResource(giantMan)), "Heroes", 3);
+        heroes[13] = new Ficha("Hulk", new ImageIcon(getClass().getResource(hulk)), "Heroes", 6);
+        heroes[14] = new Ficha("Human Torch", new ImageIcon(getClass().getResource(humanTorch)), "Heroes", 5);
+        heroes[15] = new Ficha("Ice Man", new ImageIcon(getClass().getResource(iceMan)), "Heroes", 2);
+        heroes[16] = new Ficha("Invisible Woman", new ImageIcon(getClass().getResource(invisibleWoman)), "Heroes", 5);
+        heroes[17] = new Ficha("Iron Man", new ImageIcon(getClass().getResource(ironMan)), "Heroes", 6);
+        heroes[18] = new Ficha("Nightcrawler", new ImageIcon(getClass().getResource(nightcrawler)), "Heroes", 2);
+        heroes[19] = new Ficha("Mr Fantastic", new ImageIcon(getClass().getResource(mrFantastic)), "Heroes", 10);
+        heroes[20] = new Ficha("Namor", new ImageIcon(getClass().getResource(namor)), "Heroes", 7);
+        heroes[21] = new Ficha("Nick Fury", new ImageIcon(getClass().getResource(nickFury)), "Heroes", 8);
+        heroes[22] = new Ficha("Phoenix", new ImageIcon(getClass().getResource(phoenix)), "Heroes", 2);
+        heroes[23] = new Ficha("Proffesor X", new ImageIcon(getClass().getResource(proffesorX)), "Heroes", 8);
+        heroes[24] = new Ficha("She-Hulk", new ImageIcon(getClass().getResource(sheHulk)), "Heroes", 3);
+        heroes[25] = new Ficha("Silver Surfer", new ImageIcon(getClass().getResource(silverSurfer)), "Heroes", 6);
+        heroes[26] = new Ficha("Spider Girl", new ImageIcon(getClass().getResource(spiderGirl)), "Heroes", 2);
+        heroes[27] = new Ficha("Spider Man", new ImageIcon(getClass().getResource(spiderMan)), "Heroes", 7);
+        heroes[28] = new Ficha("Storm", new ImageIcon(getClass().getResource(storm)), "Heroes", 2);
+        heroes[29] = new Ficha("Thor", new ImageIcon(getClass().getResource(thor)), "Heroes", 5);
+        heroes[30] = new Ficha("Wolverine", new ImageIcon(getClass().getResource(wolverine)), "Heroes", 7);
+        heroes[31] = new Ficha("Elektra", new ImageIcon(getClass().getResource(elektra)), "Heroes", 2);
+        heroes[32] = new Ficha("Gambit", new ImageIcon(getClass().getResource(gambit)), "Heroes", 2);
+        heroes[33] = new Ficha("Nova Blast", new ImageIcon(getClass().getResource(novaBlast)), "Heroes", 15);
+        heroes[34] = new Ficha("Nova Blast", new ImageIcon(getClass().getResource(novaBlast)), "Heroes", 15);
+        heroes[35] = new Ficha("Nova Blast", new ImageIcon(getClass().getResource(novaBlast)), "Heroes", 15);
+        heroes[36] = new Ficha("Nova Blast", new ImageIcon(getClass().getResource(novaBlast)), "Heroes", 15);
+        heroes[37] = new Ficha("Nova Blast", new ImageIcon(getClass().getResource(novaBlast)), "Heroes", 15);
+        heroes[38] = new Ficha("Nova Blast", new ImageIcon(getClass().getResource(novaBlast)), "Heroes", 15);
+        heroes[39] = new Ficha("Planeta Tierra", new ImageIcon(getClass().getResource(planetaTierra)), "Heroes", 20);
 
-        villanos[0] = new Ficha("Dr Doom", new ImageIcon(getClass().getResource(drDoom)), "Villano", 10);
-        villanos[1] = new Ficha("Galactus", new ImageIcon(getClass().getResource(galactus)), "Villano", 9);
-        villanos[2] = new Ficha("Kingpin", new ImageIcon(getClass().getResource(kingpin)), "Villano", 8);
-        villanos[3] = new Ficha("Magneto", new ImageIcon(getClass().getResource(magneto)), "Villano", 8);
-        villanos[4] = new Ficha("Apocalypse", new ImageIcon(getClass().getResource(apocalypse)), "Villano", 7);
-        villanos[5] = new Ficha("Green Goblin", new ImageIcon(getClass().getResource(greenGoblin)), "Villano", 7);
-        villanos[6] = new Ficha("Venom", new ImageIcon(getClass().getResource(venom)), "Villano", 7);
-        villanos[7] = new Ficha("Bullseye", new ImageIcon(getClass().getResource(bullseye)), "Villano", 6);
-        villanos[8] = new Ficha("Omega Red", new ImageIcon(getClass().getResource(omegaRed)), "Villano", 6);
-        villanos[9] = new Ficha("Onslaught", new ImageIcon(getClass().getResource(onslaught)), "Villano", 6);
-        villanos[10] = new Ficha("Red Skull", new ImageIcon(getClass().getResource(redSkull)), "Villano", 6);
-        villanos[11] = new Ficha("Mystique", new ImageIcon(getClass().getResource(mystyque)), "Villano", 5);
-        villanos[12] = new Ficha("Mysterio", new ImageIcon(getClass().getResource(mysterio)), "Villano", 5);
-        villanos[13] = new Ficha("Dr Octopus", new ImageIcon(getClass().getResource(drOctopus)), "Villano", 5);
-        villanos[14] = new Ficha("Deadpool", new ImageIcon(getClass().getResource(deadpool)), "Villano", 5);
-        villanos[15] = new Ficha("Abomination", new ImageIcon(getClass().getResource(abomination)), "Villano", 4);
-        villanos[16] = new Ficha("Thanos", new ImageIcon(getClass().getResource(thanos)), "Villano", 4);
-        villanos[17] = new Ficha("Black Cat", new ImageIcon(getClass().getResource(blackcat)), "Villano", 4);
-        villanos[18] = new Ficha("Sabretooth", new ImageIcon(getClass().getResource(sabretooth)), "Villano", 4);
-        villanos[19] = new Ficha("Juggernaut", new ImageIcon(getClass().getResource(juggernaut)), "Villano", 3);
-        villanos[20] = new Ficha("Rhino", new ImageIcon(getClass().getResource(rhino)), "Villano", 3);
-        villanos[21] = new Ficha("Carnage", new ImageIcon(getClass().getResource(carnage)), "Villano", 3);
-        villanos[22] = new Ficha("Mole Man", new ImageIcon(getClass().getResource(moleMan)), "Villano", 3);
-        villanos[23] = new Ficha("Lizard", new ImageIcon(getClass().getResource(lizard)), "Villano", 3);
-        villanos[24] = new Ficha("Mr.Sinister", new ImageIcon(getClass().getResource(mrSinister)), "Villano", 2);
-        villanos[25] = new Ficha("Sentinel 1", new ImageIcon(getClass().getResource(sentinel1)), "Villano", 2);
-        villanos[26] = new Ficha("Ultron", new ImageIcon(getClass().getResource(ultron)), "Villano", 2);
-        villanos[27] = new Ficha("Sandman", new ImageIcon(getClass().getResource(sandman)), "Villano", 2);
-        villanos[28] = new Ficha("Leader", new ImageIcon(getClass().getResource(leader)), "Villano", 2);
-        villanos[29] = new Ficha("Viper", new ImageIcon(getClass().getResource(viper)), "Villano", 2);
-        villanos[30] = new Ficha("Sentinel 2", new ImageIcon(getClass().getResource(sentinel2)), "Villano", 2);
-        villanos[31] = new Ficha("Electro", new ImageIcon(getClass().getResource(electro)), "Villano", 2);
-        villanos[32] = new Ficha("Black Widow", new ImageIcon(getClass().getResource(blackWidowVillana)), "Villano", 1);
-        villanos[33] = new Ficha("Pumpkin Bomb", new ImageIcon(getClass().getResource(pumpkinBomb1)), "Villano", 15);
-        villanos[34] = new Ficha("Pumpkin Bomb", new ImageIcon(getClass().getResource(pumpkinBomb1)), "Villano", 15);
-        villanos[35] = new Ficha("Pumpkin Bomb", new ImageIcon(getClass().getResource(pumpkinBomb1)), "Villano", 15);
-        villanos[36] = new Ficha("Pumpkin Bomb", new ImageIcon(getClass().getResource(pumpkinBomb1)), "Villano", 15);
-        villanos[37] = new Ficha("Pumpkin Bomb", new ImageIcon(getClass().getResource(pumpkinBomb1)), "Villano", 15);
-        villanos[38] = new Ficha("Pumpkin Bomb", new ImageIcon(getClass().getResource(pumpkinBomb1)), "Villano", 15);
-        villanos[39] = new Ficha("Tierra Villanos", new ImageIcon(getClass().getResource(tierraVillanos)), "Villano", 20);
+        villanos[0] = new Ficha("Dr Doom", new ImageIcon(getClass().getResource(drDoom)), "Villanos", 10);
+        villanos[1] = new Ficha("Galactus", new ImageIcon(getClass().getResource(galactus)), "Villanos", 9);
+        villanos[2] = new Ficha("Kingpin", new ImageIcon(getClass().getResource(kingpin)), "Villanos", 8);
+        villanos[3] = new Ficha("Magneto", new ImageIcon(getClass().getResource(magneto)), "Villanos", 8);
+        villanos[4] = new Ficha("Apocalypse", new ImageIcon(getClass().getResource(apocalypse)), "Villanos", 7);
+        villanos[5] = new Ficha("Green Goblin", new ImageIcon(getClass().getResource(greenGoblin)), "Villanos", 7);
+        villanos[6] = new Ficha("Venom", new ImageIcon(getClass().getResource(venom)), "Villanos", 7);
+        villanos[7] = new Ficha("Bullseye", new ImageIcon(getClass().getResource(bullseye)), "Villanos", 6);
+        villanos[8] = new Ficha("Omega Red", new ImageIcon(getClass().getResource(omegaRed)), "Villanos", 6);
+        villanos[9] = new Ficha("Onslaught", new ImageIcon(getClass().getResource(onslaught)), "Villanos", 6);
+        villanos[10] = new Ficha("Red Skull", new ImageIcon(getClass().getResource(redSkull)), "Villanos", 6);
+        villanos[11] = new Ficha("Mystique", new ImageIcon(getClass().getResource(mystyque)), "Villanos", 5);
+        villanos[12] = new Ficha("Mysterio", new ImageIcon(getClass().getResource(mysterio)), "Villanos", 5);
+        villanos[13] = new Ficha("Dr Octopus", new ImageIcon(getClass().getResource(drOctopus)), "Villanos", 5);
+        villanos[14] = new Ficha("Deadpool", new ImageIcon(getClass().getResource(deadpool)), "Villanos", 5);
+        villanos[15] = new Ficha("Abomination", new ImageIcon(getClass().getResource(abomination)), "Villanos", 4);
+        villanos[16] = new Ficha("Thanos", new ImageIcon(getClass().getResource(thanos)), "Villanos", 4);
+        villanos[17] = new Ficha("Black Cat", new ImageIcon(getClass().getResource(blackcat)), "Villanos", 4);
+        villanos[18] = new Ficha("Sabretooth", new ImageIcon(getClass().getResource(sabretooth)), "Villanos", 4);
+        villanos[19] = new Ficha("Juggernaut", new ImageIcon(getClass().getResource(juggernaut)), "Villanos", 3);
+        villanos[20] = new Ficha("Rhino", new ImageIcon(getClass().getResource(rhino)), "Villanos", 3);
+        villanos[21] = new Ficha("Carnage", new ImageIcon(getClass().getResource(carnage)), "Villanos", 3);
+        villanos[22] = new Ficha("Mole Man", new ImageIcon(getClass().getResource(moleMan)), "Villanos", 3);
+        villanos[23] = new Ficha("Lizard", new ImageIcon(getClass().getResource(lizard)), "Villanos", 3);
+        villanos[24] = new Ficha("Mr.Sinister", new ImageIcon(getClass().getResource(mrSinister)), "Villanos", 2);
+        villanos[25] = new Ficha("Sentinel 1", new ImageIcon(getClass().getResource(sentinel1)), "Villanos", 2);
+        villanos[26] = new Ficha("Ultron", new ImageIcon(getClass().getResource(ultron)), "Villanos", 2);
+        villanos[27] = new Ficha("Sandman", new ImageIcon(getClass().getResource(sandman)), "Villanos", 2);
+        villanos[28] = new Ficha("Leader", new ImageIcon(getClass().getResource(leader)), "Villanos", 2);
+        villanos[29] = new Ficha("Viper", new ImageIcon(getClass().getResource(viper)), "Villanos", 2);
+        villanos[30] = new Ficha("Sentinel 2", new ImageIcon(getClass().getResource(sentinel2)), "Villanos", 2);
+        villanos[31] = new Ficha("Electro", new ImageIcon(getClass().getResource(electro)), "Villanos", 2);
+        villanos[32] = new Ficha("Black Widow", new ImageIcon(getClass().getResource(blackWidowVillana)), "Villanos", 1);
+        villanos[33] = new Ficha("Pumpkin Bomb", new ImageIcon(getClass().getResource(pumpkinBomb1)), "Villanos", 15);
+        villanos[34] = new Ficha("Pumpkin Bomb", new ImageIcon(getClass().getResource(pumpkinBomb1)), "Villanos", 15);
+        villanos[35] = new Ficha("Pumpkin Bomb", new ImageIcon(getClass().getResource(pumpkinBomb1)), "Villanos", 15);
+        villanos[36] = new Ficha("Pumpkin Bomb", new ImageIcon(getClass().getResource(pumpkinBomb1)), "Villanos", 15);
+        villanos[37] = new Ficha("Pumpkin Bomb", new ImageIcon(getClass().getResource(pumpkinBomb1)), "Villanos", 15);
+        villanos[38] = new Ficha("Pumpkin Bomb", new ImageIcon(getClass().getResource(pumpkinBomb1)), "Villanos", 15);
+        villanos[39] = new Ficha("Tierra Villanos", new ImageIcon(getClass().getResource(tierraVillanos)), "Villanos", 20);
     }
 
     private void PosicionesRandom(Ficha[] tipo, int primerafila) {
@@ -444,27 +522,18 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         int fila = primerafila + (p / 10);
         int col = p % 10;
 
-        // --- Escalamos el icono a 50×50 antes de ponerlo ---
         ImageIcon original = (ImageIcon) tipo[i].getIcono();
         Image imgEscalada = original.getImage()
             .getScaledInstance(45, 50, Image.SCALE_SMOOTH);
         ImageIcon iconoRedimensionado = new ImageIcon(imgEscalada);
         tableroBotones[fila][col].setIcon(iconoRedimensionado);
-        // ---------------------------------------------------
+        
 
         fichas[fila][col] = tipo[i];
     }
 }
 
-    private void posicion(JButton objetivo) {
-        for (int i = 0; i < tableroBotones.length; i++) {
-            for (int j = 0; j < tableroBotones.length; j++) {
-                if (tableroBotones[i][j] == objetivo) {
-                    System.out.println("boton esta en fila: " + i + " Columna " + j);
-                }
-            }
-        }
-    }
+   
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -1419,155 +1488,156 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
     }//GEN-LAST:event_b1ActionPerformed
 
     private void b2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b2ActionPerformed
-        // TODO add your handling code here:
+       Click(0,1);
     }//GEN-LAST:event_b2ActionPerformed
 
     private void b3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b3ActionPerformed
-        // TODO add your handling code here:
+        Click(0,2);
     }//GEN-LAST:event_b3ActionPerformed
 
     private void b4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b4ActionPerformed
-        // TODO add your handling code here:
+        Click(0,3);
     }//GEN-LAST:event_b4ActionPerformed
 
     private void b5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b5ActionPerformed
-        // TODO add your handling code here:
+        Click(0,4);
     }//GEN-LAST:event_b5ActionPerformed
 
     private void b6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b6ActionPerformed
-        // TODO add your handling code here:
+        Click(0,5);
     }//GEN-LAST:event_b6ActionPerformed
 
     private void b7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b7ActionPerformed
-        // TODO add your handling code here:
+        Click(0,6);
     }//GEN-LAST:event_b7ActionPerformed
 
     private void b8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b8ActionPerformed
-        // TODO add your handling code here:
+        Click(0,7);
     }//GEN-LAST:event_b8ActionPerformed
 
     private void b9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b9ActionPerformed
-        // TODO add your handling code here:
+       Click(0,8);
     }//GEN-LAST:event_b9ActionPerformed
 
     private void b10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b10ActionPerformed
-        // TODO add your handling code here:
+        Click(0,9);
     }//GEN-LAST:event_b10ActionPerformed
 
     private void b11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b11ActionPerformed
-        // TODO add your handling code here:
+        Click(1,0);
     }//GEN-LAST:event_b11ActionPerformed
 
     private void b12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b12ActionPerformed
-        // TODO add your handling code here:
+       Click(1,1);
     }//GEN-LAST:event_b12ActionPerformed
 
     private void b13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b13ActionPerformed
-        // TODO add your handling code here:
+        Click(1,2);
     }//GEN-LAST:event_b13ActionPerformed
 
     private void b14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b14ActionPerformed
-        // TODO add your handling code here:
+       Click(1,3);
     }//GEN-LAST:event_b14ActionPerformed
 
     private void b15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b15ActionPerformed
-        // TODO add your handling code here:
+       Click(1,4);
     }//GEN-LAST:event_b15ActionPerformed
 
     private void b16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b16ActionPerformed
-        // TODO add your handling code here:
+        Click(1,5);
     }//GEN-LAST:event_b16ActionPerformed
 
     private void b17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b17ActionPerformed
-        // TODO add your handling code here:
+        Click(1,6);
     }//GEN-LAST:event_b17ActionPerformed
 
     private void b18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b18ActionPerformed
-        // TODO add your handling code here:
+        Click(1,7);
     }//GEN-LAST:event_b18ActionPerformed
 
     private void b19ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b19ActionPerformed
-        // TODO add your handling code here:
+        Click(1,8);
     }//GEN-LAST:event_b19ActionPerformed
 
     private void b20ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b20ActionPerformed
-        // TODO add your handling code here:
+        Click(1,9);
     }//GEN-LAST:event_b20ActionPerformed
 
     private void b21ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b21ActionPerformed
-        // TODO add your handling code here:
+        Click(2,0);
     }//GEN-LAST:event_b21ActionPerformed
 
     private void b22ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b22ActionPerformed
-        // TODO add your handling code here:
+       Click(2,1);
     }//GEN-LAST:event_b22ActionPerformed
 
     private void b23ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b23ActionPerformed
-        // TODO add your handling code here:
+       Click(2,2);
     }//GEN-LAST:event_b23ActionPerformed
 
     private void b24ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b24ActionPerformed
-        // TODO add your handling code here:
+        Click(2,3);
     }//GEN-LAST:event_b24ActionPerformed
 
     private void b25ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b25ActionPerformed
-        // TODO add your handling code here:
+        Click(2,4);
     }//GEN-LAST:event_b25ActionPerformed
 
     private void b26ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b26ActionPerformed
-        // TODO add your handling code here:
+        Click(2,5);
     }//GEN-LAST:event_b26ActionPerformed
 
     private void b27ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b27ActionPerformed
-        // TODO add your handling code here:
+        Click(2,6);
     }//GEN-LAST:event_b27ActionPerformed
 
     private void b28ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b28ActionPerformed
-        // TODO add your handling code here:
+       Click(2,7);
     }//GEN-LAST:event_b28ActionPerformed
 
     private void b29ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b29ActionPerformed
-        // TODO add your handling code here:
+       Click(2,8);
     }//GEN-LAST:event_b29ActionPerformed
 
     private void b30ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b30ActionPerformed
-        // TODO add your handling code here:
+        Click(2,9);
     }//GEN-LAST:event_b30ActionPerformed
 
     private void b31ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b31ActionPerformed
-        // TODO add your handling code here:
+        Click(3,0);
     }//GEN-LAST:event_b31ActionPerformed
 
     private void b32ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b32ActionPerformed
-        // TODO add your handling code here:
+        Click(3,1);
     }//GEN-LAST:event_b32ActionPerformed
 
     private void b33ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b33ActionPerformed
-        // TODO add your handling code here:
+       Click(3,2);
     }//GEN-LAST:event_b33ActionPerformed
 
+    
     private void b34ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b34ActionPerformed
-        // TODO add your handling code here:
+        Click(3,3);
     }//GEN-LAST:event_b34ActionPerformed
 
     private void b35ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b35ActionPerformed
-        // TODO add your handling code here:
+       Click(3,4);
     }//GEN-LAST:event_b35ActionPerformed
 
     private void b36ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b36ActionPerformed
-        // TODO add your handling code here:
+       Click(3,5);
     }//GEN-LAST:event_b36ActionPerformed
 
     private void b37ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b37ActionPerformed
-        // TODO add your handling code here:
+        Click(3,6);
     }//GEN-LAST:event_b37ActionPerformed
 
     private void b38ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b38ActionPerformed
-        // TODO add your handling code here:
+      Click(3,7);
     }//GEN-LAST:event_b38ActionPerformed
 
     private void b39ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b39ActionPerformed
-        // TODO add your handling code here:
+        Click(3,8);
     }//GEN-LAST:event_b39ActionPerformed
 
     private void b40ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b40ActionPerformed
@@ -1575,243 +1645,243 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
     }//GEN-LAST:event_b40ActionPerformed
 
     private void b41ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b41ActionPerformed
-        // TODO add your handling code here:
+       Click(4,0);
     }//GEN-LAST:event_b41ActionPerformed
 
     private void b42ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b42ActionPerformed
-        // TODO add your handling code here:
+        Click(4,1);
     }//GEN-LAST:event_b42ActionPerformed
 
     private void b43ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b43ActionPerformed
-        // TODO add your handling code here:
+      Click(4,2);
     }//GEN-LAST:event_b43ActionPerformed
 
     private void b44ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b44ActionPerformed
-        // TODO add your handling code here:
+       Click(4,3);
     }//GEN-LAST:event_b44ActionPerformed
 
     private void b45ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b45ActionPerformed
-        // TODO add your handling code here:
+        Click(4,4);
     }//GEN-LAST:event_b45ActionPerformed
 
     private void b46ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b46ActionPerformed
-        // TODO add your handling code here:
+        Click(4,5);
     }//GEN-LAST:event_b46ActionPerformed
 
     private void b47ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b47ActionPerformed
-        // TODO add your handling code here:
+        Click(4,6);
     }//GEN-LAST:event_b47ActionPerformed
 
     private void b48ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b48ActionPerformed
-        // TODO add your handling code here:
+       Click(4,7);
     }//GEN-LAST:event_b48ActionPerformed
 
     private void b49ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b49ActionPerformed
-        // TODO add your handling code here:
+       Click(4,8);
     }//GEN-LAST:event_b49ActionPerformed
 
     private void b50ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b50ActionPerformed
-        // TODO add your handling code here:
+        Click(4,9);
     }//GEN-LAST:event_b50ActionPerformed
 
     private void b51ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b51ActionPerformed
-        // TODO add your handling code here:
+       Click(5,0);
     }//GEN-LAST:event_b51ActionPerformed
 
     private void b52ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b52ActionPerformed
-        // TODO add your handling code here:
+       Click(5,1);
     }//GEN-LAST:event_b52ActionPerformed
 
     private void b53ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b53ActionPerformed
-        // TODO add your handling code here:
+        Click(5,2);
     }//GEN-LAST:event_b53ActionPerformed
 
     private void b54ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b54ActionPerformed
-        // TODO add your handling code here:
+      Click(5,3);
     }//GEN-LAST:event_b54ActionPerformed
 
     private void b55ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b55ActionPerformed
-        // TODO add your handling code here:
+        Click(5,4);
     }//GEN-LAST:event_b55ActionPerformed
 
     private void b56ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b56ActionPerformed
-        // TODO add your handling code here:
+        Click(5,5);
     }//GEN-LAST:event_b56ActionPerformed
 
     private void b57ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b57ActionPerformed
-        // TODO add your handling code here:
+        Click(5,6);
     }//GEN-LAST:event_b57ActionPerformed
 
     private void b58ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b58ActionPerformed
-        // TODO add your handling code here:
+       Click(5,7);
     }//GEN-LAST:event_b58ActionPerformed
 
     private void b59ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b59ActionPerformed
-        // TODO add your handling code here:
+       Click(5,8);
     }//GEN-LAST:event_b59ActionPerformed
 
     private void b60ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b60ActionPerformed
-        // TODO add your handling code here:
+        Click(5,9);
     }//GEN-LAST:event_b60ActionPerformed
 
     private void b61ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b61ActionPerformed
-        // TODO add your handling code here:
+       Click(6,0);
     }//GEN-LAST:event_b61ActionPerformed
 
     private void b62ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b62ActionPerformed
-        // TODO add your handling code here:
+        Click(6,1);
     }//GEN-LAST:event_b62ActionPerformed
 
     private void b63ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b63ActionPerformed
-        // TODO add your handling code here:
+        Click(6,2);
     }//GEN-LAST:event_b63ActionPerformed
 
     private void b64ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b64ActionPerformed
-        // TODO add your handling code here:
+        Click(6,3);
     }//GEN-LAST:event_b64ActionPerformed
 
     private void b65ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b65ActionPerformed
-        // TODO add your handling code here:
+        Click(6,4);
     }//GEN-LAST:event_b65ActionPerformed
 
     private void b66ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b66ActionPerformed
-        // TODO add your handling code here:
+        Click(6,5);
     }//GEN-LAST:event_b66ActionPerformed
 
     private void b67ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b67ActionPerformed
-        // TODO add your handling code here:
+       Click(6,6);
     }//GEN-LAST:event_b67ActionPerformed
 
     private void b68ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b68ActionPerformed
-        // TODO add your handling code here:
+        Click(6,7);
     }//GEN-LAST:event_b68ActionPerformed
 
     private void b69ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b69ActionPerformed
-        // TODO add your handling code here:
+        Click(6,8);
     }//GEN-LAST:event_b69ActionPerformed
 
     private void b70ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b70ActionPerformed
-        // TODO add your handling code here:
+        Click(6,9);
     }//GEN-LAST:event_b70ActionPerformed
 
     private void b71ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b71ActionPerformed
-        // TODO add your handling code here:
+       Click(7,0);
     }//GEN-LAST:event_b71ActionPerformed
 
     private void b72ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b72ActionPerformed
-        // TODO add your handling code here:
+         Click(7,1);
     }//GEN-LAST:event_b72ActionPerformed
 
     private void b73ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b73ActionPerformed
-        // TODO add your handling code here:
+         Click(7,2);
     }//GEN-LAST:event_b73ActionPerformed
 
     private void b74ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b74ActionPerformed
-        // TODO add your handling code here:
+         Click(7,3);
     }//GEN-LAST:event_b74ActionPerformed
 
     private void b75ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b75ActionPerformed
-        // TODO add your handling code here:
+        Click(7,4);
     }//GEN-LAST:event_b75ActionPerformed
 
     private void b76ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b76ActionPerformed
-        // TODO add your handling code here:
+        Click(7,5);
     }//GEN-LAST:event_b76ActionPerformed
 
     private void b77ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b77ActionPerformed
-        // TODO add your handling code here:
+        Click(7,6);
     }//GEN-LAST:event_b77ActionPerformed
 
     private void b78ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b78ActionPerformed
-        // TODO add your handling code here:
+       Click(7,7);
     }//GEN-LAST:event_b78ActionPerformed
 
     private void b79ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b79ActionPerformed
-        // TODO add your handling code here:
+         Click(7,8);
     }//GEN-LAST:event_b79ActionPerformed
 
     private void b80ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b80ActionPerformed
-        // TODO add your handling code here:
+         Click(7,9);
     }//GEN-LAST:event_b80ActionPerformed
 
     private void b81ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b81ActionPerformed
-        // TODO add your handling code here:
+         Click(8,0);
     }//GEN-LAST:event_b81ActionPerformed
 
     private void b82ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b82ActionPerformed
-        // TODO add your handling code here:
+         Click(8,1);
     }//GEN-LAST:event_b82ActionPerformed
 
     private void b83ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b83ActionPerformed
-        // TODO add your handling code here:
+        Click(8,2);
     }//GEN-LAST:event_b83ActionPerformed
 
     private void b84ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b84ActionPerformed
-        // TODO add your handling code here:
+       Click(8,3);
     }//GEN-LAST:event_b84ActionPerformed
 
     private void b85ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b85ActionPerformed
-        // TODO add your handling code here:
+         Click(8,4);
     }//GEN-LAST:event_b85ActionPerformed
 
     private void b86ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b86ActionPerformed
-        // TODO add your handling code here:
+         Click(8,5);
     }//GEN-LAST:event_b86ActionPerformed
 
     private void b87ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b87ActionPerformed
-        // TODO add your handling code here:
+        Click(8,6);
     }//GEN-LAST:event_b87ActionPerformed
 
     private void b88ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b88ActionPerformed
-        // TODO add your handling code here:
+         Click(8,7);
     }//GEN-LAST:event_b88ActionPerformed
 
     private void b89ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b89ActionPerformed
-        // TODO add your handling code here:
+         Click(8,8);
     }//GEN-LAST:event_b89ActionPerformed
 
     private void b90ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b90ActionPerformed
-        // TODO add your handling code here:
+        Click(8,9);
     }//GEN-LAST:event_b90ActionPerformed
 
     private void b91ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b91ActionPerformed
-        // TODO add your handling code here:
+        Click(9,0);
     }//GEN-LAST:event_b91ActionPerformed
 
     private void b92ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b92ActionPerformed
-        // TODO add your handling code here:
+       Click(9,1);
     }//GEN-LAST:event_b92ActionPerformed
 
     private void b93ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b93ActionPerformed
-        // TODO add your handling code here:
+       Click(9,2);
     }//GEN-LAST:event_b93ActionPerformed
 
     private void b94ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b94ActionPerformed
-        // TODO add your handling code here:
+        Click(9,3);
     }//GEN-LAST:event_b94ActionPerformed
 
     private void b95ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b95ActionPerformed
-        // TODO add your handling code here:
+        Click(9,4);
     }//GEN-LAST:event_b95ActionPerformed
 
     private void b96ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b96ActionPerformed
-        // TODO add your handling code here:
+      Click(9,5);
     }//GEN-LAST:event_b96ActionPerformed
 
     private void b97ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b97ActionPerformed
-        // TODO add your handling code here:
+        Click(9,6);
     }//GEN-LAST:event_b97ActionPerformed
 
     private void b98ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b98ActionPerformed
-        // TODO add your handling code here:
+        Click(9,7);
     }//GEN-LAST:event_b98ActionPerformed
 
     private void b99ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b99ActionPerformed
-        // TODO add your handling code here:
+        Click(9,8);
     }//GEN-LAST:event_b99ActionPerformed
 
     private void b100ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b100ActionPerformed
-        // TODO add your handling code here:
+       Click(9,9);
     }//GEN-LAST:event_b100ActionPerformed
 
     /**
