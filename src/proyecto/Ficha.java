@@ -19,7 +19,7 @@ public class Ficha {
  private int Rango;
  private boolean movio;
  
- 
+ //pppppppp
  
  public Ficha(String Nombre, ImageIcon Icono, String Tipo, int Rango){
 this.Nombre=Nombre;
