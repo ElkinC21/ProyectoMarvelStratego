@@ -97,7 +97,6 @@ public class ProyectoStratego extends javax.swing.JFrame {
     String tierraVillanos = "TIERRAVILLANOS.png";
 
     public ProyectoStratego() {
-//papapollo
         initComponents();
 this.setLocationRelativeTo(null);
         tableroBotones[0][0] = b1;
