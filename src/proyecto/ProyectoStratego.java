@@ -22,8 +22,7 @@ public class ProyectoStratego extends javax.swing.JFrame {
     Random random = new Random();
     private Ficha heroes[] = new Ficha[40];
     private Ficha villanos[] = new Ficha[40];
-    private ImageIcon[][] icVillanos;   
-    private ImageIcon[][] icHeroes= new ImageIcon[10][10];
+    private ImageIcon[][] guardariconos =new ImageIcon[10][10];
 
     String beast = "BEAST.png";
     String blackWidow = "BLACKWIDOW.png";
@@ -201,67 +200,52 @@ this.setLocationRelativeTo(null);
         tableroBotones[9][9] = b100;
 
         ValorFichas();
-        PosicionesRandom(heroes, 0);
-        PosicionesRandom(villanos, 6);
+       inicializarFormacion(villanos,true);
+       inicializarFormacion(heroes,false);
+       guardar();
+       ocultarFichas();
 
     }
     
-private void guardarIconos() {
-    for (int fila = 0; fila < fichas.length; fila++) {
-        for (int col = 0; col < fichas[fila].length; col++) {
-            Ficha ficha = fichas[fila][col];
-            if (ficha != null) {
-                Icon raw = tableroBotones[fila][col].getIcon();
-                if (raw instanceof ImageIcon) {
-                    ImageIcon icono = (ImageIcon) raw;
-                    if ("Heroes".equals(ficha.getTipo())) {
-                        icHeroes[fila][col] = icono;
-                    } else if ("Villanos".equals(ficha.getTipo())) {
-                        icVillanos[fila][col] = icono;
-                    }
-                }
+
+
+
+
+
+private void guardar() {
+    for (int i = 0; i < 10; i++) {
+        for (int j = 0; j < 10; j++) {
+            Ficha ficha = fichas[i][j];
+            if (ficha != null && !ficha.getTipo().equals(turno)) {
+                guardariconos[i][j] = (ImageIcon) tableroBotones[i][j].getIcon();
+            } else {
+                guardariconos[i][j] = null;
+            }
+        }
+    }
+
+    
+}
+ private void ocultarFichas() {
+    for (int i = 0; i < 10; i++) {
+        for (int j = 0; j < 10; j++) {
+            if (guardariconos[i][j] != null) { 
+                tableroBotones[i][j].setIcon(null);       
+                tableroBotones[i][j].setText("?");        
             }
         }
     }
 }
-
-private void esconder() {
-        boolean turnoHeroes = "Heroes".equals(turno);
-        String ocultarTipo = turnoHeroes ? "Villanos" : "Heroes";
-
-        for (int fila = 0; fila < fichas.length; fila++) {
-            for (int col = 0; col < fichas[fila].length; col++) {
-                Ficha ficha = fichas[fila][col];
-                if (ficha != null && ocultarTipo.equals(ficha.getTipo())) {
-                    JButton btn = tableroBotones[fila][col];
-                    btn.setIcon(null);
-                    btn.revalidate();
-                    btn.repaint();
-                }
+private void revelarFichas() {
+    for (int i = 0; i < 10; i++) {
+        for (int j = 0; j < 10; j++) {
+            if (guardariconos[i][j] != null) {
+                tableroBotones[i][j].setIcon(Cambiartamano(guardariconos[i][j],60,63));
+                tableroBotones[i][j].setText(""); 
             }
         }
     }
-
-private void revelar() {
-        boolean turnoHeroes = "Heroes".equals(turno);
-        String mostrarTipo = turnoHeroes ? "Villanos" : "Heroes";
-        ImageIcon[][] icArray = turnoHeroes ? icVillanos : icHeroes;
-
-        for (int fila = 0; fila < fichas.length; fila++) {
-            for (int col = 0; col < fichas[fila].length; col++) {
-                Ficha ficha = fichas[fila][col];
-                if (ficha != null && mostrarTipo.equals(ficha.getTipo())) {
-                    ImageIcon iconoGuardado = icArray[fila][col];
-                    if (iconoGuardado != null) {
-                        JButton btn = tableroBotones[fila][col];
-                        btn.setIcon(iconoGuardado);
-                        btn.revalidate();
-                        btn.repaint();
-                    }
-                }
-            }
-        }
-    }
+}
 
   
     
@@ -375,7 +359,7 @@ private void Click(int fila, int columna) {
         
         if (Accion(filasalida, colsalida, fila, columna)) {
            
-            tableroBotones[fila][columna].setIcon(fichaseleccionada.getIcono());
+            tableroBotones[fila][columna].setIcon(Cambiartamano(fichaseleccionada.getIcono(),60,63));
             fichas[fila][columna] = fichaseleccionada;
             if(turno.equals("Heroes")){
             turno="Villanos";
@@ -387,9 +371,11 @@ private void Click(int fila, int columna) {
             
             tableroBotones[filasalida][colsalida].setIcon(null);
             fichas[filasalida][colsalida] = null; 
-           guardarIconos();
-           esconder();
-           revelar();
+            revelarFichas();
+            
+            guardar();
+            ocultarFichas();
+          
             
         }else{
         JOptionPane.showMessageDialog(this,
@@ -420,7 +406,7 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
 
   private void ValorFichas() {
 
-        heroes[0] = new Ficha("Beast", new ImageIcon(new ImageIcon(getClass().getResource(beast)).getImage().getScaledInstance(50,60, Image.SCALE_SMOOTH)), "Heroes", 3);
+        heroes[0] = new Ficha("Beast", new ImageIcon(getClass().getResource(beast)), "Heroes", 3);
         heroes[1] = new Ficha("Black Widow", new ImageIcon(getClass().getResource(blackWidow)), "Heroes", 1);
         heroes[2] = new Ficha("Blade", new ImageIcon(getClass().getResource(blade)), "Heroes", 4);
         heroes[3] = new Ficha("Captain America", new ImageIcon(getClass().getResource(captainAmerica)), "Heroes", 9);
@@ -503,34 +489,104 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         villanos[39] = new Ficha("Tierra Villanos", new ImageIcon(getClass().getResource(tierraVillanos)), "Villanos", 20);
     }
 
-    private void PosicionesRandom(Ficha[] tipo, int primerafila) {
-    int[] posiciones = new int[40];
-    for (int i = 0; i < posiciones.length; i++) {
-        posiciones[i] = i;
+    private void inicializarFormacion(Ficha[] fichasBando, boolean esVillano) {
+    int filaTierra = esVillano ? 9 : 0;
+    int colTierra;
+    do {
+        colTierra =  random.nextInt(8)+1; 
+    } while (colTierra == 0 || colTierra == 9);
+
+    
+    Ficha tierra = fichasBando[39];
+    fichas[filaTierra][colTierra] = tierra;
+    tableroBotones[filaTierra][colTierra].setIcon(Cambiartamano(tierra.getIcono(),60,63));
+
+    
+    int filaArriba = esVillano ? 8 : 1;
+    int[][] alrededor = {
+        {filaTierra, colTierra - 1},
+        {filaTierra, colTierra + 1},
+        {filaArriba, colTierra},
+        {filaArriba, colTierra - 1},
+        {filaArriba, colTierra + 1}
+    };
+
+    int bombasColocadas = 0;
+    for (int[] pos : alrededor) {
+        int f = pos[0], c = pos[1];
+        if (f >= 0 && f < 10 && c >= 0 && c < 10 && fichas[f][c] == null) {
+            Ficha bomba = fichasBando[33 + bombasColocadas];
+            fichas[f][c] = bomba;
+            tableroBotones[f][c].setIcon(Cambiartamano(bomba.getIcono(),60,63));
+            bombasColocadas++;
+        }
     }
 
-    for (int i = posiciones.length - 1; i > 0; i--) {
-        int j = random.nextInt(i + 1);
-        int guardar = posiciones[i];
-        posiciones[i] = posiciones[j];
-        posiciones[j] = guardar;
+    
+    int filaExtra1 = esVillano ? 9 : 0;
+    int filaExtra2 = esVillano ? 8 : 1;
+    for (int i = bombasColocadas; i < 6; i++) {
+        while (true) {
+            int f = random.nextBoolean() ? filaExtra1 : filaExtra2;
+            int c = random.nextInt(10);
+            if (fichas[f][c] == null) {
+                Ficha bomba = fichasBando[33 + i];
+                fichas[f][c] = bomba;
+                tableroBotones[f][c].setIcon(Cambiartamano(bomba.getIcono(),60,63));
+                break;
+            }
+        }
     }
 
-    for (int i = 0; i < tipo.length; i++) {
-        int p = posiciones[i];
-        int fila = primerafila + (p / 10);
-        int col = p % 10;
+    
+    int filaR1 = esVillano ? 6 : 2;
+    int filaR2 = esVillano ? 7 : 3;
+    for (Ficha ficha : fichasBando) {
+        if (ficha.getRango() == 2) {
+            while (true) {
+                int f = random.nextBoolean() ? filaR1 : filaR2;
+                int c = random.nextInt(10);
+                if (fichas[f][c] == null) {
+                    fichas[f][c] = ficha;
+                    tableroBotones[f][c].setIcon(Cambiartamano(ficha.getIcono(),60,63));
+                    break;
+                }
+            }
+        }
+    }
 
-        ImageIcon original = (ImageIcon) tipo[i].getIcono();
-        Image imgEscalada = original.getImage()
-            .getScaledInstance(45, 50, Image.SCALE_SMOOTH);
-        ImageIcon iconoRedimensionado = new ImageIcon(imgEscalada);
-        tableroBotones[fila][col].setIcon(iconoRedimensionado);
+    
+    int filaMin = esVillano ? 6 : 0;
+    int filaMax = esVillano ? 9 : 3;
+    for (Ficha ficha : fichasBando) {
         
+        boolean colocada = false;
+        for (int f = filaMin; f <= filaMax; f++) {
+            for (int c = 0; c < 10; c++) {
+                if (fichas[f][c] == ficha) {
+                    colocada = true;
+                    break;
+                }
+            }
+            if (colocada) break;
+        }
 
-        fichas[fila][col] = tipo[i];
+       
+        if (!colocada) {
+            while (true) {
+                int f = filaMin + random.nextInt(filaMax - filaMin + 1);
+                int c = random.nextInt(10);
+                if (fichas[f][c] == null) {
+                    fichas[f][c] = ficha;
+                    tableroBotones[f][c].setIcon(Cambiartamano(ficha.getIcono(),60,63));
+                    break;
+                }
+            }
+        }
     }
 }
+
+
 
    
 
@@ -669,6 +725,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         setBackground(new java.awt.Color(204, 255, 204));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        b1.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b1.setContentAreaFilled(false);
         b1.setPreferredSize(new java.awt.Dimension(50, 23));
         b1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -677,6 +735,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b1, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 710, 60, 60));
 
+        b2.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b2.setContentAreaFilled(false);
         b2.setPreferredSize(new java.awt.Dimension(50, 23));
         b2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -685,6 +745,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b2, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 710, 60, 60));
 
+        b3.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b3.setContentAreaFilled(false);
         b3.setPreferredSize(new java.awt.Dimension(50, 23));
         b3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -693,6 +755,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b3, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 710, 60, 60));
 
+        b4.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b4.setContentAreaFilled(false);
         b4.setPreferredSize(new java.awt.Dimension(50, 23));
         b4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -701,6 +765,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b4, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 710, 60, 60));
 
+        b5.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b5.setContentAreaFilled(false);
         b5.setPreferredSize(new java.awt.Dimension(50, 23));
         b5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -709,6 +775,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b5, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 710, 60, 60));
 
+        b6.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b6.setContentAreaFilled(false);
         b6.setPreferredSize(new java.awt.Dimension(50, 23));
         b6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -717,6 +785,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b6, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 710, 60, 60));
 
+        b7.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b7.setContentAreaFilled(false);
         b7.setPreferredSize(new java.awt.Dimension(50, 23));
         b7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -725,6 +795,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b7, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 710, 60, 60));
 
+        b8.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b8.setContentAreaFilled(false);
         b8.setPreferredSize(new java.awt.Dimension(50, 23));
         b8.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -733,6 +805,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b8, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 710, 60, 60));
 
+        b9.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b9.setContentAreaFilled(false);
         b9.setPreferredSize(new java.awt.Dimension(50, 23));
         b9.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -741,6 +815,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b9, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 710, 60, 60));
 
+        b10.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b10.setContentAreaFilled(false);
         b10.setPreferredSize(new java.awt.Dimension(50, 23));
         b10.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -749,6 +825,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b10, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 710, 60, 60));
 
+        b11.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b11.setContentAreaFilled(false);
         b11.setPreferredSize(new java.awt.Dimension(50, 23));
         b11.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -757,6 +835,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b11, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 630, 60, 60));
 
+        b12.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b12.setContentAreaFilled(false);
         b12.setPreferredSize(new java.awt.Dimension(50, 23));
         b12.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -765,6 +845,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b12, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 630, 60, 60));
 
+        b13.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b13.setContentAreaFilled(false);
         b13.setPreferredSize(new java.awt.Dimension(50, 23));
         b13.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -773,6 +855,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b13, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 630, 60, 60));
 
+        b14.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b14.setContentAreaFilled(false);
         b14.setPreferredSize(new java.awt.Dimension(50, 23));
         b14.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -781,6 +865,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b14, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 630, 60, 60));
 
+        b15.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b15.setContentAreaFilled(false);
         b15.setPreferredSize(new java.awt.Dimension(50, 23));
         b15.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -789,6 +875,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b15, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 630, 60, 60));
 
+        b16.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b16.setContentAreaFilled(false);
         b16.setPreferredSize(new java.awt.Dimension(50, 23));
         b16.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -797,6 +885,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b16, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 630, 60, 60));
 
+        b17.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b17.setContentAreaFilled(false);
         b17.setPreferredSize(new java.awt.Dimension(50, 23));
         b17.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -805,6 +895,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b17, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 630, 60, 60));
 
+        b18.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b18.setContentAreaFilled(false);
         b18.setPreferredSize(new java.awt.Dimension(50, 23));
         b18.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -813,6 +905,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b18, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 630, 60, 60));
 
+        b19.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b19.setContentAreaFilled(false);
         b19.setPreferredSize(new java.awt.Dimension(50, 23));
         b19.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -821,6 +915,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b19, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 630, 60, 60));
 
+        b20.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b20.setContentAreaFilled(false);
         b20.setPreferredSize(new java.awt.Dimension(50, 23));
         b20.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -829,6 +925,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b20, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 630, 60, 60));
 
+        b21.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b21.setContentAreaFilled(false);
         b21.setPreferredSize(new java.awt.Dimension(50, 23));
         b21.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -837,6 +935,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b21, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 550, 60, 60));
 
+        b22.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b22.setContentAreaFilled(false);
         b22.setPreferredSize(new java.awt.Dimension(50, 23));
         b22.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -845,6 +945,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b22, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 550, 60, 60));
 
+        b23.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b23.setContentAreaFilled(false);
         b23.setPreferredSize(new java.awt.Dimension(50, 23));
         b23.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -853,6 +955,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b23, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 550, 60, 60));
 
+        b24.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b24.setContentAreaFilled(false);
         b24.setPreferredSize(new java.awt.Dimension(50, 23));
         b24.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -861,6 +965,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b24, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 550, 60, 60));
 
+        b25.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b25.setContentAreaFilled(false);
         b25.setPreferredSize(new java.awt.Dimension(50, 23));
         b25.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -869,6 +975,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b25, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 550, 60, 60));
 
+        b26.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b26.setContentAreaFilled(false);
         b26.setPreferredSize(new java.awt.Dimension(50, 23));
         b26.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -877,6 +985,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b26, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 550, 60, 60));
 
+        b27.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b27.setContentAreaFilled(false);
         b27.setPreferredSize(new java.awt.Dimension(50, 23));
         b27.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -885,6 +995,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b27, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 550, 60, 60));
 
+        b28.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b28.setContentAreaFilled(false);
         b28.setPreferredSize(new java.awt.Dimension(50, 23));
         b28.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -893,6 +1005,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b28, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 550, 60, 60));
 
+        b29.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b29.setContentAreaFilled(false);
         b29.setPreferredSize(new java.awt.Dimension(50, 23));
         b29.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -901,6 +1015,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b29, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 550, 60, 60));
 
+        b30.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b30.setContentAreaFilled(false);
         b30.setPreferredSize(new java.awt.Dimension(50, 23));
         b30.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -909,6 +1025,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b30, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 550, 60, 60));
 
+        b31.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b31.setContentAreaFilled(false);
         b31.setPreferredSize(new java.awt.Dimension(50, 23));
         b31.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -917,6 +1035,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b31, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 470, 60, 60));
 
+        b32.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b32.setContentAreaFilled(false);
         b32.setPreferredSize(new java.awt.Dimension(50, 23));
         b32.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -925,6 +1045,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b32, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 470, 60, 60));
 
+        b33.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b33.setContentAreaFilled(false);
         b33.setPreferredSize(new java.awt.Dimension(50, 23));
         b33.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -933,6 +1055,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b33, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 470, 60, 60));
 
+        b34.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b34.setContentAreaFilled(false);
         b34.setPreferredSize(new java.awt.Dimension(50, 23));
         b34.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -941,6 +1065,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b34, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 470, 60, 60));
 
+        b35.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b35.setContentAreaFilled(false);
         b35.setPreferredSize(new java.awt.Dimension(50, 23));
         b35.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -949,6 +1075,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b35, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 470, 60, 60));
 
+        b36.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b36.setContentAreaFilled(false);
         b36.setPreferredSize(new java.awt.Dimension(50, 23));
         b36.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -957,6 +1085,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b36, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 470, 60, 60));
 
+        b37.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b37.setContentAreaFilled(false);
         b37.setPreferredSize(new java.awt.Dimension(50, 23));
         b37.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -965,6 +1095,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b37, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 470, 60, 60));
 
+        b38.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b38.setContentAreaFilled(false);
         b38.setPreferredSize(new java.awt.Dimension(50, 23));
         b38.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -973,6 +1105,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b38, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 470, 60, 60));
 
+        b39.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b39.setContentAreaFilled(false);
         b39.setPreferredSize(new java.awt.Dimension(50, 23));
         b39.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -981,6 +1115,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b39, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 470, 60, 60));
 
+        b40.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b40.setContentAreaFilled(false);
         b40.setPreferredSize(new java.awt.Dimension(50, 23));
         b40.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -989,6 +1125,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b40, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 470, 60, 60));
 
+        b41.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b41.setContentAreaFilled(false);
         b41.setPreferredSize(new java.awt.Dimension(50, 23));
         b41.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -997,6 +1135,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b41, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 390, 60, 60));
 
+        b42.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b42.setContentAreaFilled(false);
         b42.setPreferredSize(new java.awt.Dimension(50, 23));
         b42.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1005,6 +1145,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b42, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 390, 60, 60));
 
+        b43.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b43.setContentAreaFilled(false);
         b43.setPreferredSize(new java.awt.Dimension(50, 23));
         b43.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1013,6 +1155,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b43, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 390, 60, 60));
 
+        b44.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b44.setContentAreaFilled(false);
         b44.setPreferredSize(new java.awt.Dimension(50, 23));
         b44.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1021,6 +1165,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b44, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 390, 60, 60));
 
+        b45.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b45.setContentAreaFilled(false);
         b45.setPreferredSize(new java.awt.Dimension(50, 23));
         b45.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1029,6 +1175,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b45, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 390, 60, 60));
 
+        b46.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b46.setContentAreaFilled(false);
         b46.setPreferredSize(new java.awt.Dimension(50, 23));
         b46.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1037,6 +1185,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b46, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 390, 60, 60));
 
+        b47.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b47.setContentAreaFilled(false);
         b47.setPreferredSize(new java.awt.Dimension(50, 23));
         b47.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1045,6 +1195,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b47, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 390, 60, 60));
 
+        b48.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b48.setContentAreaFilled(false);
         b48.setPreferredSize(new java.awt.Dimension(50, 23));
         b48.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1053,6 +1205,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b48, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 390, 60, 60));
 
+        b49.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b49.setContentAreaFilled(false);
         b49.setPreferredSize(new java.awt.Dimension(50, 23));
         b49.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1061,6 +1215,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b49, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 390, 60, 60));
 
+        b50.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b50.setContentAreaFilled(false);
         b50.setPreferredSize(new java.awt.Dimension(50, 23));
         b50.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1069,6 +1225,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b50, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 390, 60, 60));
 
+        b51.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b51.setContentAreaFilled(false);
         b51.setPreferredSize(new java.awt.Dimension(50, 23));
         b51.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1077,6 +1235,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b51, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 310, 60, 60));
 
+        b52.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b52.setContentAreaFilled(false);
         b52.setPreferredSize(new java.awt.Dimension(50, 23));
         b52.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1085,6 +1245,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b52, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 310, 60, 60));
 
+        b53.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b53.setContentAreaFilled(false);
         b53.setPreferredSize(new java.awt.Dimension(50, 23));
         b53.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1093,6 +1255,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b53, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 310, 60, 60));
 
+        b54.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b54.setContentAreaFilled(false);
         b54.setPreferredSize(new java.awt.Dimension(50, 23));
         b54.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1101,6 +1265,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b54, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 310, 60, 60));
 
+        b55.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b55.setContentAreaFilled(false);
         b55.setPreferredSize(new java.awt.Dimension(50, 23));
         b55.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1109,6 +1275,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b55, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 310, 60, 60));
 
+        b56.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b56.setContentAreaFilled(false);
         b56.setPreferredSize(new java.awt.Dimension(50, 23));
         b56.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1117,6 +1285,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b56, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 310, 60, 60));
 
+        b57.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b57.setContentAreaFilled(false);
         b57.setPreferredSize(new java.awt.Dimension(50, 23));
         b57.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1125,6 +1295,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b57, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 310, 60, 60));
 
+        b58.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b58.setContentAreaFilled(false);
         b58.setPreferredSize(new java.awt.Dimension(50, 23));
         b58.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1133,6 +1305,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b58, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 310, 60, 60));
 
+        b59.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b59.setContentAreaFilled(false);
         b59.setPreferredSize(new java.awt.Dimension(50, 23));
         b59.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1141,6 +1315,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b59, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 310, 60, 60));
 
+        b60.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b60.setContentAreaFilled(false);
         b60.setPreferredSize(new java.awt.Dimension(50, 23));
         b60.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1149,6 +1325,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b60, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 310, 60, 60));
 
+        b61.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b61.setContentAreaFilled(false);
         b61.setPreferredSize(new java.awt.Dimension(50, 23));
         b61.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1157,6 +1335,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b61, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 240, 60, 60));
 
+        b62.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b62.setContentAreaFilled(false);
         b62.setPreferredSize(new java.awt.Dimension(50, 23));
         b62.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1165,6 +1345,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b62, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 240, 60, 60));
 
+        b63.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b63.setContentAreaFilled(false);
         b63.setPreferredSize(new java.awt.Dimension(50, 23));
         b63.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1173,6 +1355,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b63, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 240, 60, 60));
 
+        b64.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b64.setContentAreaFilled(false);
         b64.setPreferredSize(new java.awt.Dimension(50, 23));
         b64.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1181,6 +1365,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b64, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 240, 60, 60));
 
+        b65.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b65.setContentAreaFilled(false);
         b65.setPreferredSize(new java.awt.Dimension(50, 23));
         b65.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1189,6 +1375,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b65, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 240, 60, 60));
 
+        b66.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b66.setContentAreaFilled(false);
         b66.setPreferredSize(new java.awt.Dimension(50, 23));
         b66.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1197,6 +1385,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b66, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 240, 60, 60));
 
+        b67.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b67.setContentAreaFilled(false);
         b67.setPreferredSize(new java.awt.Dimension(50, 23));
         b67.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1205,6 +1395,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b67, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 240, 60, 60));
 
+        b68.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b68.setContentAreaFilled(false);
         b68.setPreferredSize(new java.awt.Dimension(50, 23));
         b68.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1213,6 +1405,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b68, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 240, 60, 60));
 
+        b69.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b69.setContentAreaFilled(false);
         b69.setPreferredSize(new java.awt.Dimension(50, 23));
         b69.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1221,6 +1415,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b69, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 240, 60, 60));
 
+        b70.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b70.setContentAreaFilled(false);
         b70.setPreferredSize(new java.awt.Dimension(50, 23));
         b70.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1229,6 +1425,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b70, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 240, 60, 60));
 
+        b71.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b71.setContentAreaFilled(false);
         b71.setPreferredSize(new java.awt.Dimension(50, 23));
         b71.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1237,6 +1435,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b71, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 160, 60, 60));
 
+        b72.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b72.setContentAreaFilled(false);
         b72.setPreferredSize(new java.awt.Dimension(50, 23));
         b72.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1245,6 +1445,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b72, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 160, 60, 60));
 
+        b73.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b73.setContentAreaFilled(false);
         b73.setPreferredSize(new java.awt.Dimension(50, 23));
         b73.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1253,6 +1455,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b73, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 160, 60, 60));
 
+        b74.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b74.setContentAreaFilled(false);
         b74.setPreferredSize(new java.awt.Dimension(50, 23));
         b74.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1261,6 +1465,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b74, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 160, 60, 60));
 
+        b75.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b75.setContentAreaFilled(false);
         b75.setPreferredSize(new java.awt.Dimension(50, 23));
         b75.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1269,6 +1475,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b75, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 160, 60, 60));
 
+        b76.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b76.setContentAreaFilled(false);
         b76.setPreferredSize(new java.awt.Dimension(50, 23));
         b76.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1277,6 +1485,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b76, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 160, 60, 60));
 
+        b77.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b77.setContentAreaFilled(false);
         b77.setPreferredSize(new java.awt.Dimension(50, 23));
         b77.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1285,6 +1495,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b77, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 160, 60, 60));
 
+        b78.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b78.setContentAreaFilled(false);
         b78.setPreferredSize(new java.awt.Dimension(50, 23));
         b78.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1293,6 +1505,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b78, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 160, 60, 60));
 
+        b79.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b79.setContentAreaFilled(false);
         b79.setPreferredSize(new java.awt.Dimension(50, 23));
         b79.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1301,6 +1515,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b79, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 160, 60, 60));
 
+        b80.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b80.setContentAreaFilled(false);
         b80.setPreferredSize(new java.awt.Dimension(50, 23));
         b80.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1309,6 +1525,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b80, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 160, 60, 60));
 
+        b81.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b81.setContentAreaFilled(false);
         b81.setPreferredSize(new java.awt.Dimension(50, 23));
         b81.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1317,6 +1535,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b81, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 90, 60, 60));
 
+        b82.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b82.setContentAreaFilled(false);
         b82.setPreferredSize(new java.awt.Dimension(50, 23));
         b82.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1325,6 +1545,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b82, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 90, 60, 60));
 
+        b83.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b83.setContentAreaFilled(false);
         b83.setPreferredSize(new java.awt.Dimension(50, 23));
         b83.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1333,6 +1555,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b83, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 90, 60, 60));
 
+        b84.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b84.setContentAreaFilled(false);
         b84.setPreferredSize(new java.awt.Dimension(50, 23));
         b84.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1341,6 +1565,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b84, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 90, 60, 60));
 
+        b85.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b85.setContentAreaFilled(false);
         b85.setPreferredSize(new java.awt.Dimension(50, 23));
         b85.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1349,6 +1575,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b85, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 90, 60, 60));
 
+        b86.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b86.setContentAreaFilled(false);
         b86.setPreferredSize(new java.awt.Dimension(50, 23));
         b86.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1357,6 +1585,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b86, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 90, 60, 60));
 
+        b87.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b87.setContentAreaFilled(false);
         b87.setPreferredSize(new java.awt.Dimension(50, 23));
         b87.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1365,6 +1595,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b87, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 90, 60, 60));
 
+        b88.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b88.setContentAreaFilled(false);
         b88.setPreferredSize(new java.awt.Dimension(50, 23));
         b88.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1373,6 +1605,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b88, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 90, 60, 60));
 
+        b89.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b89.setContentAreaFilled(false);
         b89.setPreferredSize(new java.awt.Dimension(50, 23));
         b89.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1381,6 +1615,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b89, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 90, 60, 60));
 
+        b90.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b90.setContentAreaFilled(false);
         b90.setPreferredSize(new java.awt.Dimension(50, 23));
         b90.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1389,6 +1625,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b90, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 90, 60, 60));
 
+        b91.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b91.setContentAreaFilled(false);
         b91.setPreferredSize(new java.awt.Dimension(50, 23));
         b91.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1397,6 +1635,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b91, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 10, 60, 60));
 
+        b92.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b92.setContentAreaFilled(false);
         b92.setPreferredSize(new java.awt.Dimension(50, 23));
         b92.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1405,6 +1645,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b92, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 10, 60, 60));
 
+        b93.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b93.setContentAreaFilled(false);
         b93.setPreferredSize(new java.awt.Dimension(50, 23));
         b93.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1413,6 +1655,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b93, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 10, 60, 60));
 
+        b94.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b94.setContentAreaFilled(false);
         b94.setPreferredSize(new java.awt.Dimension(50, 23));
         b94.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1421,6 +1665,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b94, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 10, 60, 60));
 
+        b95.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b95.setContentAreaFilled(false);
         b95.setPreferredSize(new java.awt.Dimension(50, 23));
         b95.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1429,6 +1675,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b95, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 10, 60, 60));
 
+        b96.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b96.setContentAreaFilled(false);
         b96.setPreferredSize(new java.awt.Dimension(50, 23));
         b96.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1437,6 +1685,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b96, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 10, 60, 60));
 
+        b97.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b97.setContentAreaFilled(false);
         b97.setPreferredSize(new java.awt.Dimension(50, 23));
         b97.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1445,6 +1695,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b97, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 10, 60, 60));
 
+        b98.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b98.setContentAreaFilled(false);
         b98.setPreferredSize(new java.awt.Dimension(50, 23));
         b98.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1453,6 +1705,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b98, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 10, 60, 60));
 
+        b99.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b99.setContentAreaFilled(false);
         b99.setPreferredSize(new java.awt.Dimension(50, 23));
         b99.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1461,6 +1715,8 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
         });
         getContentPane().add(b99, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 10, 60, 60));
 
+        b100.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        b100.setContentAreaFilled(false);
         b100.setPreferredSize(new java.awt.Dimension(50, 23));
         b100.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1882,6 +2138,11 @@ private boolean Accion(int filasalida, int colsalida, int filadestino, int colde
     private void b100ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b100ActionPerformed
        Click(9,9);
     }//GEN-LAST:event_b100ActionPerformed
+private ImageIcon Cambiartamano(ImageIcon icono, int ancho, int alto) {
+    Image img = icono.getImage();
+    Image imgmod = img.getScaledInstance(ancho, alto, Image.SCALE_SMOOTH);
+    return new ImageIcon(imgmod);
+}
 
     /**
      * @param args the command line arguments
