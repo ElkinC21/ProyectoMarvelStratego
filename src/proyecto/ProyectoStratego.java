@@ -2119,10 +2119,10 @@ public class ProyectoStratego extends javax.swing.JFrame {
             .addGroup(panelvillanoseliminadosLayout.createSequentialGroup()
                 .addGap(21, 21, 21)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(163, Short.MAX_VALUE))
+                .addContainerGap(203, Short.MAX_VALUE))
         );
 
-        getContentPane().add(panelvillanoseliminados, new org.netbeans.lib.awtextra.AbsoluteConstraints(1040, 40, 260, 210));
+        getContentPane().add(panelvillanoseliminados, new org.netbeans.lib.awtextra.AbsoluteConstraints(1040, 0, 260, 250));
 
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/proyecto/tablero final.png"))); // NOI18N
@@ -2148,10 +2148,10 @@ public class ProyectoStratego extends javax.swing.JFrame {
             .addGroup(panelheroeseliminadosLayout.createSequentialGroup()
                 .addGap(23, 23, 23)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(151, Short.MAX_VALUE))
+                .addContainerGap(271, Short.MAX_VALUE))
         );
 
-        getContentPane().add(panelheroeseliminados, new org.netbeans.lib.awtextra.AbsoluteConstraints(1040, 270, 260, 200));
+        getContentPane().add(panelheroeseliminados, new org.netbeans.lib.awtextra.AbsoluteConstraints(1040, 270, 260, 320));
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/proyecto/spiderman_resized_300x1000.png"))); // NOI18N
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(1020, 0, 300, 780));
