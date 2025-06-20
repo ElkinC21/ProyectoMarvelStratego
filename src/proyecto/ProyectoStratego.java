@@ -100,6 +100,360 @@ public class ProyectoStratego extends javax.swing.JFrame {
         initComponents();
 
         this.setLocationRelativeTo(null);
+        // —————— Verificación MANUAL de recursos ——————
+System.out.println("Verificando imágenes cargadas:");
+
+if (getClass().getResource(beast) != null)
+    System.out.println("✔ " + beast);
+else
+    System.err.println("✖ " + beast);
+
+if (getClass().getResource(blackWidow) != null)
+    System.out.println("✔ " + blackWidow);
+else
+    System.err.println("✖ " + blackWidow);
+
+if (getClass().getResource(blade) != null)
+    System.out.println("✔ " + blade);
+else
+    System.err.println("✖ " + blade);
+
+if (getClass().getResource(captainAmerica) != null)
+    System.out.println("✔ " + captainAmerica);
+else
+    System.err.println("✖ " + captainAmerica);
+
+if (getClass().getResource(punisher) != null)
+    System.out.println("✔ " + punisher);
+else
+    System.err.println("✖ " + punisher);
+
+if (getClass().getResource(colossus) != null)
+    System.out.println("✔ " + colossus);
+else
+    System.err.println("✖ " + colossus);
+
+if (getClass().getResource(cyclops) != null)
+    System.out.println("✔ " + cyclops);
+else
+    System.err.println("✖ " + cyclops);
+
+if (getClass().getResource(daredevil) != null)
+    System.out.println("✔ " + daredevil);
+else
+    System.err.println("✖ " + daredevil);
+
+if (getClass().getResource(drStrange) != null)
+    System.out.println("✔ " + drStrange);
+else
+    System.err.println("✖ " + drStrange);
+
+if (getClass().getResource(thing) != null)
+    System.out.println("✔ " + thing);
+else
+    System.err.println("✖ " + thing);
+
+if (getClass().getResource(emmaFrost) != null)
+    System.out.println("✔ " + emmaFrost);
+else
+    System.err.println("✖ " + emmaFrost);
+
+if (getClass().getResource(ghostRider) != null)
+    System.out.println("✔ " + ghostRider);
+else
+    System.err.println("✖ " + ghostRider);
+
+if (getClass().getResource(giantMan) != null)
+    System.out.println("✔ " + giantMan);
+else
+    System.err.println("✖ " + giantMan);
+
+if (getClass().getResource(hulk) != null)
+    System.out.println("✔ " + hulk);
+else
+    System.err.println("✖ " + hulk);
+
+if (getClass().getResource(humanTorch) != null)
+    System.out.println("✔ " + humanTorch);
+else
+    System.err.println("✖ " + humanTorch);
+
+if (getClass().getResource(iceMan) != null)
+    System.out.println("✔ " + iceMan);
+else
+    System.err.println("✖ " + iceMan);
+
+if (getClass().getResource(invisibleWoman) != null)
+    System.out.println("✔ " + invisibleWoman);
+else
+    System.err.println("✖ " + invisibleWoman);
+
+if (getClass().getResource(ironMan) != null)
+    System.out.println("✔ " + ironMan);
+else
+    System.err.println("✖ " + ironMan);
+
+if (getClass().getResource(nightcrawler) != null)
+    System.out.println("✔ " + nightcrawler);
+else
+    System.err.println("✖ " + nightcrawler);
+
+if (getClass().getResource(mrFantastic) != null)
+    System.out.println("✔ " + mrFantastic);
+else
+    System.err.println("✖ " + mrFantastic);
+
+if (getClass().getResource(namor) != null)
+    System.out.println("✔ " + namor);
+else
+    System.err.println("✖ " + namor);
+
+if (getClass().getResource(nickFury) != null)
+    System.out.println("✔ " + nickFury);
+else
+    System.err.println("✖ " + nickFury);
+
+if (getClass().getResource(phoenix) != null)
+    System.out.println("✔ " + phoenix);
+else
+    System.err.println("✖ " + phoenix);
+
+if (getClass().getResource(proffesorX) != null)
+    System.out.println("✔ " + proffesorX);
+else
+    System.err.println("✖ " + proffesorX);
+
+if (getClass().getResource(sheHulk) != null)
+    System.out.println("✔ " + sheHulk);
+else
+    System.err.println("✖ " + sheHulk);
+
+if (getClass().getResource(silverSurfer) != null)
+    System.out.println("✔ " + silverSurfer);
+else
+    System.err.println("✖ " + silverSurfer);
+
+if (getClass().getResource(spiderGirl) != null)
+    System.out.println("✔ " + spiderGirl);
+else
+    System.err.println("✖ " + spiderGirl);
+
+if (getClass().getResource(spiderMan) != null)
+    System.out.println("✔ " + spiderMan);
+else
+    System.err.println("✖ " + spiderMan);
+
+if (getClass().getResource(storm) != null)
+    System.out.println("✔ " + storm);
+else
+    System.err.println("✖ " + storm);
+
+if (getClass().getResource(thor) != null)
+    System.out.println("✔ " + thor);
+else
+    System.err.println("✖ " + thor);
+
+if (getClass().getResource(wolverine) != null)
+    System.out.println("✔ " + wolverine);
+else
+    System.err.println("✖ " + wolverine);
+
+if (getClass().getResource(elektra) != null)
+    System.out.println("✔ " + elektra);
+else
+    System.err.println("✖ " + elektra);
+
+if (getClass().getResource(gambit) != null)
+    System.out.println("✔ " + gambit);
+else
+    System.err.println("✖ " + gambit);
+
+if (getClass().getResource(novaBlast) != null)
+    System.out.println("✔ " + novaBlast);
+else
+    System.err.println("✖ " + novaBlast);
+
+if (getClass().getResource(planetaTierra) != null)
+    System.out.println("✔ " + planetaTierra);
+else
+    System.err.println("✖ " + planetaTierra);
+
+if (getClass().getResource(drDoom) != null)
+    System.out.println("✔ " + drDoom);
+else
+    System.err.println("✖ " + drDoom);
+
+if (getClass().getResource(galactus) != null)
+    System.out.println("✔ " + galactus);
+else
+    System.err.println("✖ " + galactus);
+
+if (getClass().getResource(kingpin) != null)
+    System.out.println("✔ " + kingpin);
+else
+    System.err.println("✖ " + kingpin);
+
+if (getClass().getResource(magneto) != null)
+    System.out.println("✔ " + magneto);
+else
+    System.err.println("✖ " + magneto);
+
+if (getClass().getResource(apocalypse) != null)
+    System.out.println("✔ " + apocalypse);
+else
+    System.err.println("✖ " + apocalypse);
+
+if (getClass().getResource(greenGoblin) != null)
+    System.out.println("✔ " + greenGoblin);
+else
+    System.err.println("✖ " + greenGoblin);
+
+if (getClass().getResource(venom) != null)
+    System.out.println("✔ " + venom);
+else
+    System.err.println("✖ " + venom);
+
+if (getClass().getResource(bullseye) != null)
+    System.out.println("✔ " + bullseye);
+else
+    System.err.println("✖ " + bullseye);
+
+if (getClass().getResource(omegaRed) != null)
+    System.out.println("✔ " + omegaRed);
+else
+    System.err.println("✖ " + omegaRed);
+
+if (getClass().getResource(onslaught) != null)
+    System.out.println("✔ " + onslaught);
+else
+    System.err.println("✖ " + onslaught);
+
+if (getClass().getResource(redSkull) != null)
+    System.out.println("✔ " + redSkull);
+else
+    System.err.println("✖ " + redSkull);
+
+if (getClass().getResource(mystyque) != null)
+    System.out.println("✔ " + mystyque);
+else
+    System.err.println("✖ " + mystyque);
+
+if (getClass().getResource(mysterio) != null)
+    System.out.println("✔ " + mysterio);
+else
+    System.err.println("✖ " + mysterio);
+
+if (getClass().getResource(drOctopus) != null)
+    System.out.println("✔ " + drOctopus);
+else
+    System.err.println("✖ " + drOctopus);
+
+if (getClass().getResource(deadpool) != null)
+    System.out.println("✔ " + deadpool);
+else
+    System.err.println("✖ " + deadpool);
+
+if (getClass().getResource(abomination) != null)
+    System.out.println("✔ " + abomination);
+else
+    System.err.println("✖ " + abomination);
+
+if (getClass().getResource(thanos) != null)
+    System.out.println("✔ " + thanos);
+else
+    System.err.println("✖ " + thanos);
+
+if (getClass().getResource(blackcat) != null)
+    System.out.println("✔ " + blackcat);
+else
+    System.err.println("✖ " + blackcat);
+
+if (getClass().getResource(sabretooth) != null)
+    System.out.println("✔ " + sabretooth);
+else
+    System.err.println("✖ " + sabretooth);
+
+if (getClass().getResource(juggernaut) != null)
+    System.out.println("✔ " + juggernaut);
+else
+    System.err.println("✖ " + juggernaut);
+
+if (getClass().getResource(rhino) != null)
+    System.out.println("✔ " + rhino);
+else
+    System.err.println("✖ " + rhino);
+
+if (getClass().getResource(carnage) != null)
+    System.out.println("✔ " + carnage);
+else
+    System.err.println("✖ " + carnage);
+
+if (getClass().getResource(moleMan) != null)
+    System.out.println("✔ " + moleMan);
+else
+    System.err.println("✖ " + moleMan);
+
+if (getClass().getResource(lizard) != null)
+    System.out.println("✔ " + lizard);
+else
+    System.err.println("✖ " + lizard);
+
+if (getClass().getResource(mrSinister) != null)
+    System.out.println("✔ " + mrSinister);
+else
+    System.err.println("✖ " + mrSinister);
+
+if (getClass().getResource(sentinel1) != null)
+    System.out.println("✔ " + sentinel1);
+else
+    System.err.println("✖ " + sentinel1);
+
+if (getClass().getResource(ultron) != null)
+    System.out.println("✔ " + ultron);
+else
+    System.err.println("✖ " + ultron);
+
+if (getClass().getResource(sandman) != null)
+    System.out.println("✔ " + sandman);
+else
+    System.err.println("✖ " + sandman);
+
+if (getClass().getResource(leader) != null)
+    System.out.println("✔ " + leader);
+else
+    System.err.println("✖ " + leader);
+
+if (getClass().getResource(viper) != null)
+    System.out.println("✔ " + viper);
+else
+    System.err.println("✖ " + viper);
+
+if (getClass().getResource(sentinel2) != null)
+    System.out.println("✔ " + sentinel2);
+else
+    System.err.println("✖ " + sentinel2);
+
+if (getClass().getResource(electro) != null)
+    System.out.println("✔ " + electro);
+else
+    System.err.println("✖ " + electro);
+
+if (getClass().getResource(blackWidowVillana) != null)
+    System.out.println("✔ " + blackWidowVillana);
+else
+    System.err.println("✖ " + blackWidowVillana);
+
+if (getClass().getResource(pumpkinBomb1) != null)
+    System.out.println("✔ " + pumpkinBomb1);
+else
+    System.err.println("✖ " + pumpkinBomb1);
+
+if (getClass().getResource(tierraVillanos) != null)
+    System.out.println("✔ " + tierraVillanos);
+else
+    System.err.println("✖ " + tierraVillanos);
+// ————————————————————————————————
+
         tableroBotones[0][0] = b1;
         tableroBotones[0][1] = b2;
         tableroBotones[0][2] = b3;
